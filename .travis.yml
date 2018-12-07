@@ -6,10 +6,8 @@ cache:
   -node_modules
 script:
  - npm run build
- deploy:
+deploy:
   provider: heroku
   api_key:
     secure: 744fff7d-5617-49c1-a691-e0aa1473a891
   app: parking-lot-frontend-web
-  on:
-    repo: LOLO2Team/frontend-web
