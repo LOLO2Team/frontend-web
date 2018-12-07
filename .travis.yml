@@ -5,10 +5,10 @@ cache:
   directories:
     - node_modules
 script:
+  - npm install
   - echo "npm test temporarily disabled"
   - npm run build
 deploy:
   provider: heroku
-  api_key:
-    secure: 744fff7d-5617-49c1-a691-e0aa1473a891
+  api_key: 744fff7d-5617-49c1-a691-e0aa1473a891
   app: parking-lot-frontend-web
