@@ -1,18 +1,134 @@
-import React, { Component } from 'react';
-import { Layout, Menu, Icon } from 'antd';
+import React, { Component } from 'react'
+import { Layout, Form, Icon, Input, Button, } from 'antd';
+import { connect } from "react-redux";
+import ParkingBoyList from './ParkingBoyList'
 const { Header, Sider, Content } = Layout;
+const FormItem = Form.Item;
 
-export default class ParkingBoysPage extends Component {
-    render() {
-        return (
-            <div>
-                <Content style={{
-                    margin: '24px 16px', padding: 24, background: '#fff', minHeight: 280,
-                }}
-                >
-                    Welcome to our new Web APP
-          </Content>
-            </div>
-        )
-    }
+class ParkingBoysPage extends Component {
+  onAddParkingBoy = () => {
+    this.props.onCreateParkingBoy(this.props.form.getFieldValue('name'),
+      this.props.form.getFieldValue('username'),
+      this.props.form.getFieldValue('password'),
+      this.props.form.getFieldValue('email'),
+      this.props.form.getFieldValue('phone'),
+      this.props.form.getFieldValue('role'));
+    const dummy = this.props.refreshData();
+    this.props.form.setFields({
+      ['name']: { value: '' }, 
+      ['username']: { value: '' },
+      ['password']: { value: '' }, 
+      ['email']: { value: '' },
+      ['phone']: { value: '' },
+      ['role']: { value: '' },
+    })
+  }
+  render() {
+    const {
+      getFieldDecorator
+    } = this.props.form;
+    return (
+      <div>
+        <Content style={{
+          margin: '24px 16px', padding: 24, background: '#fff', minHeight: 280,
+        }}
+        >
+          <h3>Create Parking Boy</h3>
+          <Form layout="inline" onSubmit={this.handleSubmit}>
+            <FormItem>
+              {getFieldDecorator('name', {
+                rules: [{ required: false, message: "Please input employee's name!" }],
+              })(
+                <Input prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="Name" />
+              )}
+            </FormItem>
+            <FormItem>
+              {getFieldDecorator('username', {
+                rules: [{ required: false, message: "Please input employee's username!" }],
+              })(
+                <Input prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="Username" />
+              )}
+            </FormItem>
+            <FormItem>
+              {getFieldDecorator('email', {
+                rules: [{ required: false, message: "Please input employee's email!" }],
+              })(
+                <Input prefix={<Icon type="mail" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="Email" />
+              )}
+            </FormItem>
+            <FormItem>
+              {getFieldDecorator('phone', {
+                rules: [{ required: false, message: "Please input employee's phone!" }],
+              })(
+                <Input prefix={<Icon type="mobile" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="Phone" />
+              )}
+            </FormItem>
+            <FormItem>
+              {getFieldDecorator('password', {
+                rules: [{ required: false, message: "Please input employee's password!" }],
+              })(
+                <Input prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="Password" type="password" />
+              )}
+            </FormItem>
+            <FormItem>
+              {getFieldDecorator('role', {
+                rules: [{ required: false, message: "Please input employee's role!" }],
+              })(
+                <Input prefix={<Icon type="tag" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="Role" />
+              )}
+            </FormItem>
+            <FormItem>
+              <Button
+                type="primary"
+                htmlType="submit"
+                // disabled={hasErrors(getFieldsError())}
+                onClick={this.onAddParkingBoy}
+              >
+                Create
+          </Button>
+            </FormItem>
+          </Form>
+          <hr />
+          <ParkingBoyList />
+        </Content>
+      </div>
+    )
+  }
 }
+const mapDispatchToProps = dispatch => ({
+  onCreateParkingBoy: (name, username, password, email, phone, role) => fetch("https://parking-lot-backend.herokuapp.com/parkingboys", {
+    mode: 'cors',
+    method: 'POST',
+    body: JSON.stringify({
+      "name": name,
+      "username": username,
+      "password": password,
+      "phone": phone,
+      "email": email,
+      "role": role
+    }),
+    headers: new Headers({
+      'Content-Type': 'application/json'
+    })
+  }),
+  refreshData: () => fetch("https://parking-lot-backend.herokuapp.com/parkingboys", {
+    //getInitData: fetch("http://localhost:8081/orders", {
+    headers: new Headers({
+      'Content-Type': 'application/json'
+    }),
+    mode: 'cors',
+    method: 'GET'
+  })
+    .then(res => res.json())
+    .then(res => {
+      dispatch({
+        type: "SET_PARKING_BOYS",
+        payload: res
+      });
+    })
+    .then(console.log("added"))
+});
+
+ParkingBoysPage = Form.create({})(ParkingBoysPage);
+
+export default connect(null, mapDispatchToProps)(ParkingBoysPage);

@@ -1,5 +1,6 @@
 const initialState = {
-  parkingLots: []
+  parkingLots: [],
+  parkingBoys: []
 
 }
 
@@ -22,10 +23,26 @@ export default (state = initialState, { type, payload }) => {
       }
     }
 
-    case "POST_PARKING_LOTS":{
+    case "POST_PARKING_LOTS": {
       return {
         ...state,
         parkingLots: state.parkingLots.concat(payload)
+      }
+    }
+
+    case "SET_PARKING_BOYS": {
+      return {
+        ...state,
+        parkingBoys: payload.map((boy, index) => {
+          return {
+            key: index,
+            name: boy.name,
+            username: boy.username,
+            email: boy.email,
+            phone: boy.phone,
+            role: boy.role
+          }
+        })
       }
     }
 
