@@ -5,6 +5,10 @@ import ParkingBoyList from './ParkingBoyList'
 const { Header, Sider, Content } = Layout;
 const FormItem = Form.Item;
 
+function hasErrors(fieldsError) {
+  return Object.keys(fieldsError).some(field => fieldsError[field]);
+}
+
 class ParkingBoysPage extends Component {
   onAddParkingBoy = () => {
     this.props.onCreateParkingBoy(this.props.form.getFieldValue('name'),
@@ -23,10 +27,31 @@ class ParkingBoysPage extends Component {
       ['role']: { value: '' },
     })
   }
+  componentDidMount() {
+    // To disabled submit button at the beginning.
+    this.props.form.validateFields();
+  }
+
+  handleSubmit = (e) => {
+    e.preventDefault();
+    this.props.form.validateFields((err, values) => {
+      if (!err) {
+        console.log('Received values of form: ', values);
+      }
+    });
+  }
   render() {
     const {
-      getFieldDecorator
+      getFieldDecorator, getFieldsError, getFieldError, isFieldTouched,
     } = this.props.form;
+    const nameError = isFieldTouched('name') && getFieldError('name');
+    const usernameError = isFieldTouched('username') && getFieldError('username');
+    const passwordError = isFieldTouched('password') && getFieldError('password');
+    const emailError = isFieldTouched('email') && getFieldError('email');
+    const phoneError = isFieldTouched('phone') && getFieldError('phone');
+    const roleError = isFieldTouched('role') && getFieldError('role');
+
+
     return (
       <div>
         <Content style={{
@@ -35,44 +60,50 @@ class ParkingBoysPage extends Component {
         >
           <h3>Create Parking Boy</h3>
           <Form layout="inline" onSubmit={this.handleSubmit}>
-            <FormItem>
+            <FormItem validateStatus={nameError ? 'error' : ''}
+            help={nameError || ''}>
               {getFieldDecorator('name', {
-                rules: [{ required: false, message: "Please input employee's name!" }],
+                rules: [{ required: true, message: "Please input employee's name!" }],
               })(
                 <Input prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="Name" />
               )}
             </FormItem>
-            <FormItem>
+            <FormItem validateStatus={usernameError ? 'error' : ''}
+            help={usernameError || ''}>
               {getFieldDecorator('username', {
-                rules: [{ required: false, message: "Please input employee's username!" }],
+                rules: [{ required: true, message: "Please input employee's username!" }],
               })(
                 <Input prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="Username" />
               )}
             </FormItem>
-            <FormItem>
+            <FormItem validateStatus={emailError ? 'error' : ''}
+            help={emailError || ''}>
               {getFieldDecorator('email', {
-                rules: [{ required: false, message: "Please input employee's email!" }],
+                rules: [{ required: true, message: "Please input employee's email!" }],
               })(
                 <Input prefix={<Icon type="mail" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="Email" />
               )}
             </FormItem>
-            <FormItem>
+            <FormItem validateStatus={phoneError ? 'error' : ''}
+            help={phoneError || ''}>
               {getFieldDecorator('phone', {
-                rules: [{ required: false, message: "Please input employee's phone!" }],
+                rules: [{ required: true, message: "Please input employee's phone!" }],
               })(
                 <Input prefix={<Icon type="mobile" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="Phone" />
               )}
             </FormItem>
-            <FormItem>
+            <FormItem validateStatus={passwordError ? 'error' : ''}
+            help={passwordError || ''}>
               {getFieldDecorator('password', {
-                rules: [{ required: false, message: "Please input employee's password!" }],
+                rules: [{ required: true, message: "Please input employee's password!" }],
               })(
                 <Input prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="Password" type="password" />
               )}
             </FormItem>
-            <FormItem>
+            <FormItem validateStatus={roleError ? 'error' : ''}
+            help={roleError || ''}>
               {getFieldDecorator('role', {
-                rules: [{ required: false, message: "Please input employee's role!" }],
+                rules: [{ required: true, message: "Please input employee's role!" }],
               })(
                 <Input prefix={<Icon type="tag" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="Role" />
               )}
@@ -81,7 +112,7 @@ class ParkingBoysPage extends Component {
               <Button
                 type="primary"
                 htmlType="submit"
-                // disabled={hasErrors(getFieldsError())}
+                disabled={hasErrors(getFieldsError())}
                 onClick={this.onAddParkingBoy}
               >
                 Create

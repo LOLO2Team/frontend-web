@@ -35,8 +35,8 @@ class ParkingLotsPage extends Component {
       getFieldDecorator, getFieldsError, getFieldError, isFieldTouched,
     } = this.props.form;
 
-    const nameError = isFieldTouched('userName') && getFieldError('userName');
-    const capacityError = isFieldTouched('password') && getFieldError('password');
+    const nameError = isFieldTouched('parkingLotName') && getFieldError('parkingLotName');
+    const capacityError = isFieldTouched('capacity') && getFieldError('capacity');
     return (
       <div>
         <Content style={{
