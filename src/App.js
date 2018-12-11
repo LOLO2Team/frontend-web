@@ -1,7 +1,9 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import { Layout, Menu, Icon } from 'antd';
 import ParkingBoysPage from './components/ParkingBoysPage'
-import { Switch, Route, Link } from 'react-router-dom'
+import ParkingLotsPage from './components/ParkingLotsPage'
+import BoyLotAssoPage from './components/BoyLotAssoPage'
+import { Switch, Route, Link } from 'react-router-dom';
 
 const { Header, Sider, Content } = Layout;
 
@@ -34,10 +36,12 @@ class App extends Component {
               <Menu.Item key="2">
                 <i class="fab fa-product-hunt"></i>
                 <span class="nav-padding">Parking Lots</span>
+                <Link to="/parkingLots">Parking Lots</Link>
               </Menu.Item>
               <Menu.Item key="3">
                 <i class="fas fa-link"></i>
                 <span class="nav-padding">Association</span>
+                <Link to="/asso-parkingBoys-parkingLots">Association</Link>
               </Menu.Item>
             </Menu>
           </Sider>
@@ -52,6 +56,8 @@ class App extends Component {
             </Header>
             <Switch>
               <Route path="/parkingBoys" exact component={ParkingBoysPage} />
+              <Route path="/parkingLots" exact component={ParkingLotsPage} />
+              <Route path="/asso-parkingBoys-parkingLots" exact component={BoyLotAssoPage} />
 
             </Switch>
           </Layout>
