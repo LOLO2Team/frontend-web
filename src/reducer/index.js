@@ -28,7 +28,8 @@ export default (state = initialState, { type, payload }) => {
             parkingLotName: lot.parkingLotName,
             capacity: lot.capacity,
             reservedSpace: lot.reservedSpace,
-            employeeId: lot.employeeId
+            employeeId: lot.employeeId,
+            status: lot.status
           }
         })
       }
@@ -120,6 +121,7 @@ export default (state = initialState, { type, payload }) => {
             email: boy.email,
             phone: boy.phone,
             role: boy.role,
+            status: boy.status,
             parkingLots: boy.parkingLotResponses
           }
         })
