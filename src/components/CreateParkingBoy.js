@@ -7,7 +7,7 @@ const FormItem = Form.Item;
 
 class CreateParkingBoy extends Component {
   onAddParkingBoy = () => {
-    this.props.onCreateParkingBoy(this.props.form.getFieldValue('name'),
+      this.props.onCreateParkingBoy(this.props.form.getFieldValue('name'),
       this.props.form.getFieldValue('username'),
       this.props.form.getFieldValue('password'),
       this.props.form.getFieldValue('email'),
@@ -122,10 +122,11 @@ const mapDispatchToProps = dispatch => ({
       'Authorization': token
     })
   }),
-  refreshData: () => fetch("https://parking-lot-backend.herokuapp.com/parkingboys", {
+  refreshData: (token) => fetch("https://parking-lot-backend.herokuapp.com/parkingboys", {
     //getInitData: fetch("http://localhost:8081/orders", {
     headers: new Headers({
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'Authorization': token
     }),
     mode: 'cors',
     method: 'GET'

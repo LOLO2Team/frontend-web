@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Layout, Form, Icon, Input, Button, } from 'antd';
 import { connect } from "react-redux";
 import ParkingBoyList from './ParkingBoyList';
+import ParkingBoysResource from '../resources/parkingBoyResource';
 import CreateParkingBoy from './CreateParkingBoy';
 const { Header, Sider, Content } = Layout;
 const FormItem = Form.Item;
@@ -27,8 +28,8 @@ class ParkingBoysPage extends Component {
       if (err) {
         return;
       }
-
       console.log('Received values of form: ', values);
+      this.props.createBoy(values, this.props.token);
       form.resetFields();
       this.setState({ visible: false });
     });
@@ -82,7 +83,8 @@ class ParkingBoysPage extends Component {
   }
 }
 const mapStateToProps = state => ({
-  myRole: state.myRole
+  myRole: state.myRole,
+  token: state.token
 })
 
 const mapDispatchToProps = dispatch => ({
@@ -91,6 +93,12 @@ const mapDispatchToProps = dispatch => ({
       type: "SWITCH_MY_ROLE",
       payload: newRole
     })
+  },
+
+  createBoy: (values, token) => {
+    ParkingBoysResource.createBoy(values, token)
   }
+    
+  
 })
 export default connect(mapStateToProps, mapDispatchToProps)(ParkingBoysPage);

@@ -1,8 +1,14 @@
 import React, { Component } from 'react'
 import { Table, Divider, Tag } from 'antd';
 import { connect } from "react-redux";
+import ParkingBoysResource from '../resources/parkingBoyResource';
 
 class ParkingBoyList extends Component {
+
+    onClickDelete = (id) => {
+        this.props.deleteEmployee(id, this.props.token)
+    }
+
     columns = [
         //     {
         //     title: 'ID',
@@ -41,15 +47,14 @@ class ParkingBoyList extends Component {
             key: 'action',
             render: (text, record) => (
                 <span>
-                    <a href="javascript:;">Invite {record.name}</a>
+                    <a href="javascript:;" >Invite {record.name}</a>
                     <Divider type="vertical" />
-                    <a href="javascript:;">Delete</a>
+                    <a href="javascript:;" onClick={() => this.onClickDelete(record.employeeId)}>Delete</a>
                 </span>
             ),
         }];
     render() {
-        const dummy = this.props.getInitData;
-        console.log(this.props.parkingBoys)
+        const dummy = this.props.getInitData(this.props.token);
         return (
             <Table columns={this.columns} dataSource={this.props.parkingBoys} />
         )
@@ -57,25 +62,22 @@ class ParkingBoyList extends Component {
 }
 
 const mapStateToProps = state => ({
-    parkingBoys: state.parkingBoys
+    parkingBoys: state.parkingBoys,
+    token: state.token
 });
 
 const mapDispatchToProps = dispatch => ({
-    getInitData: fetch("https://parking-lot-backend.herokuapp.com/parkingboys", {
-        //getInitData: fetch("http://localhost:8081/orders", {
-        headers: new Headers({
-            'Content-Type': 'application/json'
-        }),
-        mode: 'cors',
-        method: 'GET'
-    })
+    getInitData: (token) => ParkingBoysResource.getAll(token)
         .then(res => res.json())
         .then(res => {
             dispatch({
                 type: "SET_PARKING_BOYS",
                 payload: res
             });
-        })
+        }),
+    deleteEmployee: (id, token) => {
+        ParkingBoysResource.deleteEmployee(id, token) 
+    }
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ParkingBoyList);
