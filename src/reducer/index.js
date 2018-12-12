@@ -1,11 +1,21 @@
 const initialState = {
   parkingLots: [],
-  parkingBoys: []
+  parkingBoys: [],
+  myRole: "manager",
+  token: '',
+  authorized: false
 
 }
 
 export default (state = initialState, { type, payload }) => {
   switch (type) {
+
+    case "SET_TOKEN": {
+      return {
+        ...state,
+        token: payload
+      }
+    }
 
     case "SET_PARKING_LOTS": {
       return {
@@ -36,6 +46,7 @@ export default (state = initialState, { type, payload }) => {
         parkingBoys: payload.map((boy, index) => {
           return {
             key: index,
+            employeeId: boy.employeeId,
             name: boy.name,
             username: boy.username,
             email: boy.email,
@@ -43,6 +54,20 @@ export default (state = initialState, { type, payload }) => {
             role: boy.role
           }
         })
+      }
+    }
+
+    case "SWITCH_MY_ROLE": {
+      return {
+        ...state,
+        myRole: payload
+      }
+    }
+
+    case "SET_AUTHORIZED": {
+      return {
+        ...state,
+        authorized: true
       }
     }
 

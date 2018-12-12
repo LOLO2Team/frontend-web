@@ -43,7 +43,7 @@ class ParkingLotsPage extends Component {
           margin: '24px 16px', padding: 24, background: '#fff', minHeight: 280,
         }}
         >
-          <h3>Create Parking Lot</h3>
+          {/* <h3>Create Parking Lot</h3>
           <Form layout="inline" onSubmit={this.handleSubmit}>
             <FormItem validateStatus={nameError ? 'error' : ''}
             help={nameError || ''}>
@@ -73,7 +73,7 @@ class ParkingLotsPage extends Component {
           </Button>
             </FormItem>
           </Form>
-          <hr />
+          <hr /> */}
           <ParkingLotList />
         </Content>
       </div >

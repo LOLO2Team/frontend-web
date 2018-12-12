@@ -4,6 +4,7 @@ import ParkingBoysPage from './components/ParkingBoysPage'
 import ParkingLotsPage from './components/ParkingLotsPage'
 import BoyLotAssoPage from './components/BoyLotAssoPage'
 import { Switch, Route, Link } from 'react-router-dom';
+import Login from './components/Login';
 
 const { Header, Sider, Content } = Layout;
 
@@ -55,10 +56,10 @@ class App extends Component {
               This is a Title
             </Header>
             <Switch>
-              <Route path="/parkingBoys" exact component={ParkingBoysPage} />
-              <Route path="/parkingLots" exact component={ParkingLotsPage} />
-              <Route path="/asso-parkingBoys-parkingLots" exact component={BoyLotAssoPage} />
-
+              <Route path="/parkingLots" component={ParkingLotsPage} />
+              <Route path="/asso-parkingBoys-parkingLots" component={BoyLotAssoPage} />
+              <Route path="/parkingBoys" component={ParkingBoysPage} />
+              <Route component={ParkingLotsPage} />
             </Switch>
           </Layout>
         </Layout>

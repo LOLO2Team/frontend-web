@@ -2,49 +2,6 @@ import React, { Component } from 'react'
 import { Table, Divider, Tag } from 'antd';
 import { connect } from "react-redux";
 
-// const columns = [{
-//     title: 'ID',
-//     dataIndex: 'parkingLotId',
-//     key: 'parkingLotId',
-// }, {
-//     title: 'Name',
-//     dataIndex: 'name',
-//     key: 'name',
-// }, {
-//     title: 'Username',
-//     dataIndex: 'username',
-//     key: 'username',
-// }, {
-//     title: 'Email',
-//     key: 'email',
-//     dataIndex: 'email',
-// }, {
-//     title: 'Phone',
-//     key: 'phone',
-//     dataIndex: 'phone',
-// },
-// {
-//     title: 'Role',
-//     key: 'role',
-//     dataIndex: 'role',
-//     render: 
-//         <span>
-//           {<Tag color="blue" key={this.props.parkingBoys.role}>{this.props.parkingBoys.role}</Tag>}
-//         </span>
-// },
-// {
-//     title: 'Action',
-//     key: 'action',
-//     render: (text, record) => (
-//         <span>
-//             <a href="javascript:;">Invite {record.name}</a>
-//             <Divider type="vertical" />
-//             <a href="javascript:;">Delete</a>
-//         </span>
-//     ),
-// }];
-
-
 class ParkingBoyList extends Component {
     columns = [
         //     {
