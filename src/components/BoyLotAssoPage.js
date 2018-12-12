@@ -29,8 +29,6 @@ class BoyLotAssoPage extends Component {
       selectedKeys: [],
       disabled: false,
     }
-    this.props.getInitData();
-    this.props.getParkingLots();
   }
 
   columns = [
@@ -110,9 +108,27 @@ class BoyLotAssoPage extends Component {
   handleDisable = (disabled) => {
     this.setState({ disabled });
   };
+
+  getParkingLotKeysByEmployee(employeeId) {
+    // // this.props.getInitData(this.props.token);
+    // // this.props.getParkingLots(this.props.token);
+    // console.log("get keys")
+    // console.log(this.props.parkingBoysForAsso
+    //   .find(boy => boy.employeeId === employeeId)
+    //   .parkingLotKeys
+    //   .map(key => {
+    //     return parseInt(key)
+    //   }))
+    return this.props.parkingBoysForAsso
+      .find(boy => boy.employeeId === employeeId)
+      .parkingLotKeys;
+  }
+
   render() {
+    const dummy = this.props.getInitData(this.props.token);
+    const dummy2 = this.props.getParkingLots(this.props.token);
+    
     const { targetKeys, selectedKeys, disabled } = this.state;
-    console.log(this.props.parkingBoys)
     return (
       <div>
         <Content style={{
@@ -122,13 +138,14 @@ class BoyLotAssoPage extends Component {
           <Table
             columns={this.columns}
             expandedRowRender={employee => {
-              this.props.getParkingLotsByEmployee(employee.employeeId);
+              // console.log(employee)
               // console.log(this.props.getParkingLotsByEmployee(employee.employeeId))
+              // console.log(this.props.parkingLotsForAsso)
               return <p style={{ margin: 0 }}>
                 <Transfer
                   dataSource={this.props.parkingLotsForAsso}
                   titles={['Available', 'Selected']}
-                  targetKeys={this.props.parkingLotsByEmployeeForAsso}
+                  targetKeys={this.getParkingLotKeysByEmployee(employee.employeeId)}
                   selectedKeys={selectedKeys}
                   onChange={this.handleChange}
                   onSelectChange={this.handleSelectChange}
@@ -148,17 +165,18 @@ class BoyLotAssoPage extends Component {
 }
 
 const mapStateToProps = state => ({
+  token: state.token,
   parkingBoys: state.parkingBoys,
   parkingLotsForAsso: state.parkingLotsForAsso,
-  parkingLotsByEmployeeForAsso: state.parkingLotsByEmployeeForAsso
+  parkingBoysForAsso: state.parkingBoysForAsso
 });
 
 const mapDispatchToProps = dispatch => ({
-  getInitData: () => {
+  getInitData: (token) => {
     fetch("https://parking-lot-backend.herokuapp.com/parkingboys", {
-      //getInitData: fetch("http://localhost:8081/orders", {
       headers: new Headers({
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': token
       }),
       mode: 'cors',
       method: 'GET'
@@ -171,11 +189,12 @@ const mapDispatchToProps = dispatch => ({
         });
       });
   },
-  getParkingLots: () => {
+  getParkingLots: (token) => {
     fetch("https://parking-lot-backend.herokuapp.com/parkinglots", {
       //getInitData: fetch("http://localhost:8081/orders", {
       headers: new Headers({
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': token
       }),
       mode: 'cors',
       method: 'GET'
@@ -183,28 +202,32 @@ const mapDispatchToProps = dispatch => ({
       .then(res => res.json())
       .then(res => {
         dispatch({
-          type: "ASSO_PAGE_GET_PARKING_LOTS",
+          type: "ASSO_PAGE_GET_ALL_PARKING_LOTS",
           payload: res
+        });
+        dispatch({
+          type: "ASSO_PAGE_MAP_LOT_KEY",
+          payload: ''
         });
       });
   },
-  getParkingLotsByEmployee: (employeeId) => {
-    fetch("https://parking-lot-backend.herokuapp.com/parkinglots?employeeId=" + employeeId, {
-      //getInitData: fetch("http://localhost:8081/orders", {
-      headers: new Headers({
-        'Content-Type': 'application/json'
-      }),
-      mode: 'cors',
-      method: 'GET'
-    })
-      .then(res => res.json())
-      .then(res => {
-        dispatch({
-          type: "ASSO_PAGE_GET_PARKING_LOTS_BY_EMPLOYEE",
-          payload: res
-        });
-      });
-  }
+  // getParkingLotsByEmployee: (employeeId) => {
+  //   fetch("https://parking-lot-backend.herokuapp.com/parkinglots?employeeId=" + employeeId, {
+  //     //getInitData: fetch("http://localhost:8081/orders", {
+  //     headers: new Headers({
+  //       'Content-Type': 'application/json'
+  //     }),
+  //     mode: 'cors',
+  //     method: 'GET'
+  //   })
+  //     .then(res => res.json())
+  //     .then(res => {
+  //       dispatch({
+  //         type: "ASSO_PAGE_GET_PARKING_LOTS_BY_EMPLOYEE",
+  //         payload: res
+  //       });
+  //     });
+  // }
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(BoyLotAssoPage);

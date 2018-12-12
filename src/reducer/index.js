@@ -4,8 +4,8 @@ const initialState = {
   myRole: "manager",
   token: '',
   authorized: false,
-  parkingLotsForAsso: [],
-  parkingLotsByEmployeeForAsso: []
+  parkingBoysForAsso: [],
+  parkingLotsForAsso: []
 }
 
 export default (state = initialState, { type, payload }) => {
@@ -34,29 +34,66 @@ export default (state = initialState, { type, payload }) => {
       }
     }
 
-    case "ASSO_PAGE_GET_PARKING_LOTS": {
+    case "ASSO_PAGE_GET_ALL_PARKING_LOTS": {
       return {
         ...state,
         parkingLotsForAsso: payload.map((lot, index) => {
           return {
             key: index,
             title: lot.parkingLotName,
-            description: lot.parkingLotId
+            description: String(lot.parkingLotId)
           }
         })
       }
     }
 
+    case "ASSO_PAGE_MAP_LOT_KEY": {
+      return {
+        ...state,
+        parkingBoysForAsso:
+          state.parkingBoys.map((boy) => {
+            const parkingLotIds = boy.parkingLots.map(lot => {
+              return lot.parkingLotId
+            });
+            // console.log(Object.keys(
+            //   state.parkingLotsForAsso
+            //     .filter(lot => {
+            //       if (parkingLotIds.includes(parseInt(lot.description))) {
+            //         return parseInt(lot.key, 10)
+            //       }
+            //     })
+            // ).map(key => {
+            //   return parseInt(key)
+            // }))
+            const parkingLotKeys = 
+            Object.keys(
+              state.parkingLotsForAsso
+                .filter(lot => {
+                  if (parkingLotIds.includes(parseInt(lot.description))) {
+                    return lot.key
+                  }
+                })).map(key => {
+                  return parseInt(key)
+                });
+            return {
+              ...boy,
+              parkingLotKeys: parkingLotKeys
+                
+            }
+          })
+      }
+    }
+
     case "GET_PARKING_LOTS_BY_EMPLOYEE": {
-      const employeeParkingLotIds = payload.map(lot => { 
+      const employeeParkingLotIds = payload.map(lot => {
         return lot.parkingLotId;
       });
 
-      const parkingLotsByEmployeeForAsso = state.parkingLotsForAsso.filter((lot) => 
+      const parkingLotsByEmployeeForAsso = state.parkingLotsForAsso.filter((lot) =>
         employeeParkingLotIds.includes(parseInt(lot.description)))
         .map(lot => {
-        return lot.key;
-      });
+          return lot.key;
+        });
 
       return {
         ...state,
@@ -82,7 +119,8 @@ export default (state = initialState, { type, payload }) => {
             username: boy.username,
             email: boy.email,
             phone: boy.phone,
-            role: boy.role
+            role: boy.role,
+            parkingLots: boy.parkingLotResponses
           }
         })
       }
