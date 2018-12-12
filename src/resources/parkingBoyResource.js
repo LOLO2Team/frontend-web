@@ -22,8 +22,9 @@ export default {
             method: 'PUT'
         })
     },
-    inviteEmployee: (id, token) => {
-        return fetch("https://parking-lot-backend.herokuapp.com/parkingboys/" + id +"/status/WORKING" , {
+    editEmployee: (id, status, token) => {
+        console.log("api")
+        return fetch("https://parking-lot-backend.herokuapp.com/parkingboys/" + id +"/status/" +status , {
             //getInitData: fetch("http://localhost:8081/orders", {
             headers: new Headers({
                 'Content-Type': 'application/json',
@@ -32,6 +33,7 @@ export default {
             mode: 'cors',
             method: 'PUT'
         })
+        .then(res => console.log(res))
     },
     createBoy: (value,token) => {
         return fetch("https://parking-lot-backend.herokuapp.com/parkingboys", {

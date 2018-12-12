@@ -23,13 +23,6 @@ class Login extends React.Component {
     const name = this.props.form.getFieldValue('username');      
     this.props.login(name, password);
   }
-  // authorized = () => {
-    
-  // }
-
-  // goToHomePage = () =>{
-  //   this.props.history.push("/parkingBoysPage");
-  // }
 
   render() {
     const { getFieldDecorator } = this.props.form;
@@ -53,19 +46,10 @@ class Login extends React.Component {
             )}
           </FormItem>
           <FormItem>
-            {/* {getFieldDecorator('remember', {
-              valuePropName: 'checked',
-              initialValue: true,
-            })(
-              <Checkbox>Remember me</Checkbox>
-            )}
-            <a className="login-form-forgot" href="">Forgot password</a> */}
+
             <Button type="primary" htmlType="submit" className="login-form-button">
               Log in
           </Button>
-          
-
-            {/* Or <a href="">register now!</a> */}
           </FormItem>
         </Form>
       </div>
