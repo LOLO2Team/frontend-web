@@ -29,6 +29,8 @@ class BoyLotAssoPage extends Component {
       selectedKeys: [],
       disabled: false,
     }
+    this.props.getInitData(this.props.token);
+    this.props.getParkingLots(this.props.token);
   }
 
   columns = [
@@ -88,26 +90,35 @@ class BoyLotAssoPage extends Component {
   handleChange = (nextTargetKeys, direction, moveKeys) => {
     this.setState({ targetKeys: nextTargetKeys });
 
-    console.log('targetKeys: ', nextTargetKeys);
-    console.log('direction: ', direction);
-    console.log('moveKeys: ', moveKeys);
+    // console.log('targetKeys: ', nextTargetKeys);
+    // console.log('direction: ', direction);
+    // console.log('moveKeys: ', moveKeys);
+    for (var index=0; index<moveKeys.length; index++){
+      console.log(this.props.selectedEmployeeId)
+      this.props.assignLotToBoys(this.props.token, moveKeys[index], this.props.selectedEmployeeId)
+    }
   }
-
+  
   handleSelectChange = (sourceSelectedKeys, targetSelectedKeys) => {
     this.setState({ selectedKeys: [...sourceSelectedKeys, ...targetSelectedKeys] });
 
-    console.log('sourceSelectedKeys: ', sourceSelectedKeys);
-    console.log('targetSelectedKeys: ', targetSelectedKeys);
+    // console.log('sourceSelectedKeys: ', sourceSelectedKeys);
+    // console.log('targetSelectedKeys: ', targetSelectedKeys);
   }
 
   handleScroll = (direction, e) => {
-    console.log('direction:', direction);
-    console.log('target:', e.target);
+    // console.log('direction:', direction);
+    // console.log('target:', e.target);
   }
 
   handleDisable = (disabled) => {
     this.setState({ disabled });
   };
+
+  selectEmployee = (employee) => {
+    this.props.selectEmployee(employee)
+    console.log(this.props.selectedEmployeeId)
+  }
 
   getParkingLotKeysByEmployee(employeeId) {
     // // this.props.getInitData(this.props.token);
@@ -125,8 +136,6 @@ class BoyLotAssoPage extends Component {
   }
 
   render() {
-    const dummy = this.props.getInitData(this.props.token);
-    const dummy2 = this.props.getParkingLots(this.props.token);
     
     const { targetKeys, selectedKeys, disabled } = this.state;
     return (
@@ -138,6 +147,7 @@ class BoyLotAssoPage extends Component {
           <Table
             columns={this.columns}
             expandedRowRender={employee => {
+              this.selectEmployee(employee)
               // console.log(employee)
               // console.log(this.props.getParkingLotsByEmployee(employee.employeeId))
               // console.log(this.props.parkingLotsForAsso)
@@ -168,10 +178,52 @@ const mapStateToProps = state => ({
   token: state.token,
   parkingBoys: state.parkingBoys,
   parkingLotsForAsso: state.parkingLotsForAsso,
-  parkingBoysForAsso: state.parkingBoysForAsso
+  parkingBoysForAsso: state.parkingBoysForAsso,
+  selectedEmployeeId: state.selectedEmployeeId
 });
 
 const mapDispatchToProps = dispatch => ({
+  selectEmployee: (employee) => {
+    dispatch({
+      type:"SELECT_EMPLOYEE",
+      payload: employee.employeeId
+    })
+  },
+
+  assignLotToBoys: (token, lotId, employeeId) => {
+    console.log(employeeId)
+    fetch("https://parking-lot-backend.herokuapp.com/parkinglots/"+ lotId +"/employeeId/"+ employeeId, {
+      headers: new Headers({
+        'Content-Type': 'application/json',
+        'Authorization': token
+      }),
+      mode: 'cors',
+      method: 'PUT'
+    })
+      .then(res => res.json())
+      .then(
+        fetch("https://parking-lot-backend.herokuapp.com/parkinglots", {
+          headers: new Headers({
+            'Content-Type': 'application/json',
+            'Authorization': token
+          }),
+          mode: 'cors',
+          method: 'GET'
+        })
+          .then(res => res.json())
+          .then(res => {
+            dispatch({
+              type: "ASSO_PAGE_GET_ALL_PARKING_LOTS",
+              payload: res
+            });
+            dispatch({
+              type: "ASSO_PAGE_MAP_LOT_KEY",
+              payload: ''
+            });
+          })
+      );
+  },
+
   getInitData: (token) => {
     fetch("https://parking-lot-backend.herokuapp.com/parkingboys", {
       headers: new Headers({
