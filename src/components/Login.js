@@ -5,6 +5,7 @@ import {
 
 import { connect } from "react-redux";
 import { Redirect } from 'react-router-dom';
+import ParkingLotDashboard from './ParkingLotDashboard';
 const FormItem = Form.Item;
 
 class Login extends React.Component {
