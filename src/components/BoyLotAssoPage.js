@@ -5,29 +5,32 @@ import { Table, Divider, Tag } from 'antd';
 import { Transfer, Switch } from 'antd';
 const { Header, Sider, Content } = Layout;
 
-const mockData = [];
+let mockData = [];
 for (let i = 0; i < 20; i++) {
   mockData.push({
     key: i.toString(),
     title: `content${i + 1}`,
     description: `description of content${i + 1}`,
-    disabled: i % 3 < 1,
+    // disabled: i % 3 < 1,
   });
 }
 
-const oriTargetKeys = mockData
-  .filter(item => item.key === 1)
-  .map(item => item.key);
+// const oriTargetKeys = mockData
+//   .filter(item => item.key === 1)
+//   .map(item => item.key);
+
+//   console.log(oriTargetKeys)
 
 class BoyLotAssoPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      targetKeys: oriTargetKeys,
+      targetKeys: [],
       selectedKeys: [],
       disabled: false,
     }
-    this.props.getInitData()
+    this.props.getInitData();
+    this.props.getParkingLots();
   }
 
   columns = [
@@ -68,9 +71,9 @@ class BoyLotAssoPage extends Component {
       key: 'action',
       render: (text, record) => (
         <span>
-          <a href="javascript:;">Invite {record.name}</a>
+          {/* <a href="javascript:;">Invite {record.name}</a>
           <Divider type="vertical" />
-          <a href="javascript:;">Delete</a>
+          <a href="javascript:;">Delete</a> */}
           <Switch
             unCheckedChildren="inactive"
             checkedChildren="active"
@@ -81,6 +84,8 @@ class BoyLotAssoPage extends Component {
         </span>
       ),
     }];
+
+    
 
   handleChange = (nextTargetKeys, direction, moveKeys) => {
     this.setState({ targetKeys: nextTargetKeys });
@@ -107,6 +112,7 @@ class BoyLotAssoPage extends Component {
   };
   render() {
     const { targetKeys, selectedKeys, disabled } = this.state;
+    console.log(this.props.parkingBoys)
     return (
       <div>
         <Content style={{
@@ -116,11 +122,13 @@ class BoyLotAssoPage extends Component {
           <Table
             columns={this.columns}
             expandedRowRender={employee => {
+              this.props.getParkingLotsByEmployee(employee.employeeId);
+              // console.log(this.props.getParkingLotsByEmployee(employee.employeeId))
               return <p style={{ margin: 0 }}>
                 <Transfer
-                  dataSource={() => this.props.getParkingLotsByEmployee(employee.employeeId)}
+                  dataSource={this.props.parkingLotsForAsso}
                   titles={['Available', 'Selected']}
-                  targetKeys={targetKeys}
+                  targetKeys={this.props.parkingLotsByEmployeeForAsso}
                   selectedKeys={selectedKeys}
                   onChange={this.handleChange}
                   onSelectChange={this.handleSelectChange}
@@ -140,7 +148,9 @@ class BoyLotAssoPage extends Component {
 }
 
 const mapStateToProps = state => ({
-  parkingBoys: state.parkingBoys
+  parkingBoys: state.parkingBoys,
+  parkingLotsForAsso: state.parkingLotsForAsso,
+  parkingLotsByEmployeeForAsso: state.parkingLotsByEmployeeForAsso
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -173,7 +183,7 @@ const mapDispatchToProps = dispatch => ({
       .then(res => res.json())
       .then(res => {
         dispatch({
-          type: "SET_PARKING_LOTS",
+          type: "ASSO_PAGE_GET_PARKING_LOTS",
           payload: res
         });
       });
@@ -190,7 +200,7 @@ const mapDispatchToProps = dispatch => ({
       .then(res => res.json())
       .then(res => {
         dispatch({
-          type: "SET_PARKING_BOYS",
+          type: "ASSO_PAGE_GET_PARKING_LOTS_BY_EMPLOYEE",
           payload: res
         });
       });

@@ -3,8 +3,9 @@ const initialState = {
   parkingBoys: [],
   myRole: "manager",
   token: '',
-  authorized: false
-
+  authorized: false,
+  parkingLotsForAsso: [],
+  parkingLotsByEmployeeForAsso: []
 }
 
 export default (state = initialState, { type, payload }) => {
@@ -30,6 +31,36 @@ export default (state = initialState, { type, payload }) => {
             employeeId: lot.employeeId
           }
         })
+      }
+    }
+
+    case "ASSO_PAGE_GET_PARKING_LOTS": {
+      return {
+        ...state,
+        parkingLotsForAsso: payload.map((lot, index) => {
+          return {
+            key: index,
+            title: lot.parkingLotName,
+            description: lot.parkingLotId
+          }
+        })
+      }
+    }
+
+    case "GET_PARKING_LOTS_BY_EMPLOYEE": {
+      const employeeParkingLotIds = payload.map(lot => { 
+        return lot.parkingLotId;
+      });
+
+      const parkingLotsByEmployeeForAsso = state.parkingLotsForAsso.filter((lot) => 
+        employeeParkingLotIds.includes(parseInt(lot.description)))
+        .map(lot => {
+        return lot.key;
+      });
+
+      return {
+        ...state,
+        parkingLotsByEmployeeForAsso: parkingLotsByEmployeeForAsso
       }
     }
 

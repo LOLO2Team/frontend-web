@@ -46,7 +46,8 @@ class ParkingLotList extends Component {
 }
 
 const mapStateToProps = state => ({
-    parkingLots: state.parkingLots
+    parkingLots: state.parkingLots,
+    token: state.token
 });
 
 const mapDispatchToProps = dispatch => ({
