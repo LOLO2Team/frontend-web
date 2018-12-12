@@ -94,8 +94,8 @@ class BoyLotAssoPage extends Component {
     // console.log('direction: ', direction);
     // console.log('moveKeys: ', moveKeys);
     for (var index=0; index<moveKeys.length; index++){
-      console.log(this.props.selectedEmployeeId)
-      this.props.assignLotToBoys(this.props.token, moveKeys[index], this.props.selectedEmployeeId)
+      console.log(this.props.parkingLotsForAsso[moveKeys[index]])
+      this.props.assignLotToBoys(this.props.token, this.props.parkingLotsForAsso[moveKeys[index]].description, this.props.selectedEmployeeId)
     }
   }
   
@@ -117,7 +117,6 @@ class BoyLotAssoPage extends Component {
 
   selectEmployee = (employee) => {
     this.props.selectEmployee(employee)
-    console.log(this.props.selectedEmployeeId)
   }
 
   getParkingLotKeysByEmployee(employeeId) {
