@@ -59,7 +59,7 @@ class ParkingBoysPage extends Component {
           margin: '24px 16px', padding: 24, background: '#fff', minHeight: 280,
         }}
         >
-        <Button type="primary" onClick={this.showModal}>Create Parking Boy</Button>
+        <Button className="margin-bottom-15" type="primary" onClick={this.showModal}>Create Parking Boy</Button>
         <CreateParkingBoy
           wrappedComponentRef={this.saveFormRef}
           visible={this.state.visible}
