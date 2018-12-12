@@ -30,7 +30,8 @@ class BoyLotAssoPage extends Component {
       disabled: false,
     }
     this.props.getInitData(this.props.token);
-    this.props.getParkingLots(this.props.token);
+    // console.log(this.props.parkingBoysForAsso);
+    // this.props.getParkingLots(this.props.token);
   }
 
   columns = [
@@ -129,6 +130,12 @@ class BoyLotAssoPage extends Component {
     //   .map(key => {
     //     return parseInt(key)
     //   }))
+    this.props.getInitData(this.props.token);
+    // console.log(this.props.parkingBoysForAsso);
+    if (this.props.parkingBoysForAsso.length === 0 || this.props.parkingBoysForAsso == null) {
+      // console.log("return");
+      return [];
+    }
     return this.props.parkingBoysForAsso
       .find(boy => boy.employeeId === employeeId)
       .parkingLotKeys;
@@ -214,12 +221,14 @@ const mapDispatchToProps = dispatch => ({
             dispatch({
               type: "ASSO_PAGE_GET_ALL_PARKING_LOTS",
               payload: res
-            });
+            })
+          })
+          .then(
             dispatch({
               type: "ASSO_PAGE_MAP_LOT_KEY",
               payload: ''
-            });
-          })
+            })
+          )
       );
   },
 
@@ -238,7 +247,28 @@ const mapDispatchToProps = dispatch => ({
           type: "SET_PARKING_BOYS",
           payload: res
         });
-      });
+      })
+      .then(
+        fetch("https://parking-lot-backend.herokuapp.com/parkinglots", {
+      //getInitData: fetch("http://localhost:8081/orders", {
+      headers: new Headers({
+        'Content-Type': 'application/json',
+        'Authorization': token
+      }),
+      mode: 'cors',
+      method: 'GET'
+    })
+      .then(res => res.json())
+      .then(res => {
+        dispatch({
+          type: "ASSO_PAGE_GET_ALL_PARKING_LOTS",
+          payload: res
+        });
+        dispatch({
+          type: "ASSO_PAGE_MAP_LOT_KEY",
+          payload: ''
+        });
+      }));
   },
   getParkingLots: (token) => {
     fetch("https://parking-lot-backend.herokuapp.com/parkinglots", {

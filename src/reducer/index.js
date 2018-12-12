@@ -57,30 +57,20 @@ export default (state = initialState, { type, payload }) => {
             const parkingLotIds = boy.parkingLots.map(lot => {
               return lot.parkingLotId
             });
-            // console.log(Object.keys(
-            //   state.parkingLotsForAsso
-            //     .filter(lot => {
-            //       if (parkingLotIds.includes(parseInt(lot.description))) {
-            //         return parseInt(lot.key, 10)
-            //       }
-            //     })
-            // ).map(key => {
-            //   return parseInt(key)
-            // }))
-            const parkingLotKeys = 
-            Object.keys(
+
+            const parkingLotKeys =
               state.parkingLotsForAsso
                 .filter(lot => {
                   if (parkingLotIds.includes(parseInt(lot.description))) {
-                    return lot.key
+                    return String(lot.key)
                   }
-                })).map(key => {
-                  return parseInt(key)
+                }).map(lot => {
+                  return parseInt(lot.key)
                 });
             return {
               ...boy,
               parkingLotKeys: parkingLotKeys
-                
+
             }
           })
       }
@@ -143,8 +133,8 @@ export default (state = initialState, { type, payload }) => {
       }
     }
 
-    case "SELECT_EMPLOYEE":{
-      return{
+    case "SELECT_EMPLOYEE": {
+      return {
         ...state,
         selectedEmployeeId: payload
       }
