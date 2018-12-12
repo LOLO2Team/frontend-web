@@ -12,14 +12,25 @@ export default {
             
     },
     deleteEmployee: (id, token) => {
-        return fetch("https://parking-lot-backend.herokuapp.com/parkingboys/" + id, {
+        return fetch("https://parking-lot-backend.herokuapp.com/parkingboys/" + id +"/status/FROZEN" , {
             //getInitData: fetch("http://localhost:8081/orders", {
             headers: new Headers({
                 'Content-Type': 'application/json',
                 'Authorization': token
             }),
             mode: 'cors',
-            method: 'DELETE'
+            method: 'PUT'
+        })
+    },
+    inviteEmployee: (id, token) => {
+        return fetch("https://parking-lot-backend.herokuapp.com/parkingboys/" + id +"/status/WORKING" , {
+            //getInitData: fetch("http://localhost:8081/orders", {
+            headers: new Headers({
+                'Content-Type': 'application/json',
+                'Authorization': token
+            }),
+            mode: 'cors',
+            method: 'PUT'
         })
     },
     createBoy: (value,token) => {

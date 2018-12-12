@@ -9,6 +9,10 @@ class ParkingBoyList extends Component {
         this.props.deleteEmployee(id, this.props.token)
     }
 
+    onClickInvite = (id) => {
+        this.props.inviteEmployee(id, this.props.token)
+    }
+
     columns = [
         //     {
         //     title: 'ID',
@@ -43,13 +47,23 @@ class ParkingBoyList extends Component {
             ),
         },
         {
+            title: 'Status',
+            key: 'status',
+            dataIndex: 'status',
+            render: (text,record) => (
+                <span>
+                    {<Tag color="blue" key={this.props.parkingBoys.status}>{record.status}</Tag>}
+                </span>
+            ),
+        },
+        {
             title: 'Action',
             key: 'action',
             render: (text, record) => (
                 <span>
-                    <a href="javascript:;" >Invite {record.name}</a>
+                    <a href="javascript:;" onClick={() => this.onClickInvite(record.employeeId)}>Invite {record.name}</a>
                     <Divider type="vertical" />
-                    <a href="javascript:;" onClick={() => this.onClickDelete(record.employeeId)}>Delete</a>
+                    <a href="javascript:;" onClick={() => this.onClickDelete(record.employeeId)}>Freeze</a>
                 </span>
             ),
         }];
@@ -77,6 +91,9 @@ const mapDispatchToProps = dispatch => ({
         }),
     deleteEmployee: (id, token) => {
         ParkingBoysResource.deleteEmployee(id, token) 
+    },
+    inviteEmployee: (id, token) => {
+        ParkingBoysResource.inviteEmployee(id, token) 
     }
 });
 
