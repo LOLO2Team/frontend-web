@@ -42,3 +42,20 @@ You don’t have to ever use `eject`. The curated feature set is suitable for sm
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
 To learn React, check out the [React documentation](https://reactjs.org/).
+
+---------------
+
+## Guide to deploy to prod
+1. Replace the deploy text in .travis.yml with below
+```
+deploy:
+  provider: heroku
+  api_key: 02ad66a3-fa5a-4f4a-a0c2-1542413b1246
+  app: parking-lot-frontend-web-prod
+  on:
+    branches:
+        only:
+            - prod
+```
+2. delete other yml in the root folder
+3. push to prod branch
