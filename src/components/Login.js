@@ -20,13 +20,13 @@ class Login extends React.Component {
   }
   clickLogin = () => {
     const password = this.props.form.getFieldValue('password');
-    const name = this.props.form.getFieldValue('username');      
+    const name = this.props.form.getFieldValue('username');
     this.props.login(name, password);
   }
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    
+
     return (
       <div>
         <Form onSubmit={this.handleSubmit} className="login-form" id="login-form">
@@ -72,23 +72,56 @@ const mapDispatchToProps = dispatch => ({
       headers: new Headers({ 'Content-Type': 'application/json' })
     })
       .then(res => {
+        const token = res.headers.get("Authorization")
         console.log(res.headers.get("Authorization"))
         if (res.status === 200) {
           dispatch({
             type: "SET_TOKEN",
             payload: res.headers.get("Authorization")
           });
-          dispatch({
-            type: "SET_AUTHORIZED",
-            payload: ''
-          })
-          
+          return token
         } else {
           // Toast.fail("Username/password incorrect!", 1, null, false);
           alert("Username/password incorrect!");
+          return false;
         }
       })
-      
+      .then(token => {
+        if (!token) {
+          return false;
+        }
+        return fetch("https://parking-lot-backend.herokuapp.com/employees?username=" + name, {
+          mode: 'cors',
+          method: 'GET',
+          headers: new Headers({
+            'Content-Type': 'application/json',
+            'Authorization': token
+          })
+        })
+      })
+      .then(res => {
+        if (!res) {
+          return false;
+        }
+        if (res.status !== 200) {
+          return false;
+        }
+        return res.json();
+      })
+      .then(res => {
+        if (!res) {
+          return false;
+        }
+        const rolesList = res.rolesList;
+        if (rolesList.includes("ROLE_ADMIN") || rolesList.includes("ROLE_MANAGER")) {
+          dispatch({
+            type: "SET_AUTHORIZED",
+            payload: ''
+          });
+        } else {
+          alert("You are not authorized.");
+        }
+      })
   }
 });
 
