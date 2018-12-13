@@ -8,15 +8,15 @@ import parkingBoyResource from '../resources/parkingBoyResource';
 const { Header, Sider, Content } = Layout;
 
 
-let mockData = [];
-for (let i = 0; i < 20; i++) {
-  mockData.push({
-    key: i.toString(),
-    title: `content${i + 1}`,
-    description: `description of content${i + 1}`,
-    // disabled: i % 3 < 1,
-  });
-}
+// let mockData = [];
+// for (let i = 0; i < 20; i++) {
+//   mockData.push({
+//     key: i.toString(),
+//     title: `content${i + 1}`,
+//     description: `description of content${i + 1}`,
+//     // disabled: i % 3 < 1,
+//   });
+// }
 
 // const oriTargetKeys = mockData
 //   .filter(item => item.key === 1)
@@ -31,8 +31,9 @@ class BoyLotAssoPage extends Component {
       targetKeys: [],
       selectedKeys: [],
       disabled: false,
+      random: ''
     }
-    this.props.getInitData(this.props.token);
+    // this.props.getInitData(this.props.token);
     // console.log(this.props.parkingBoysForAsso);
     // this.props.getParkingLots(this.props.token);
   }
@@ -117,13 +118,13 @@ class BoyLotAssoPage extends Component {
 
   handleDisable = (disabled) => {
     this.setState({ disabled });
-  };
+  }
 
   selectEmployee = (employee) => {
     this.props.selectEmployee(employee)
   }
 
-  getParkingLotKeysByEmployee(employeeId) {
+  getParkingLotKeysByEmployee = (employeeId) => {
     // // this.props.getInitData(this.props.token);
     // // this.props.getParkingLots(this.props.token);
     // console.log("get keys")
@@ -135,7 +136,7 @@ class BoyLotAssoPage extends Component {
     //   }))
     // this.props.getInitData(this.props.token);
 
-    // console.log(this.props.parkingBoysForAsso);
+    console.log(this.props.parkingBoysForAsso);
     if (this.props.parkingBoysForAsso.length === 0 || this.props.parkingBoysForAsso == null) {
       // console.log("return");
       return [];
@@ -145,8 +146,21 @@ class BoyLotAssoPage extends Component {
       .parkingLotKeys;
   }
 
+  componentWillMount() {
+    this.props.getInitData(this.props.token);
+  }
+
+
+  componentDidMount() {
+    // this.props.getInitData(this.props.token);
+    this.interval = setInterval(() => this.props.getInitData(this.props.token), 1000)
+    // this.interval = setInterval(this.printSth, 1000)
+  }
+  componentWillUnmount() {
+    clearInterval(this.interval);
+  }
+
   render() {
-    console.log("render")
     const { targetKeys, selectedKeys, disabled } = this.state;
     return (
       <div>
@@ -213,36 +227,14 @@ const mapDispatchToProps = dispatch => ({
     // .then(res => res.json())
     .then(res => {
       if (res.status === 201) {
-        // alert("boy-lot asso created");
+        alert("boy-lot asso created");
       } else {
         alert(res.status + " error occurred when assigning parking lot");
       }
     });
-    parkingBoyResource.getAllParkingBoy(token, dispatch)
-        fetch("https://parking-lot-backend.herokuapp.com/parkinglots", {
-          headers: new Headers({
-            'Content-Type': 'application/json',
-            'Authorization': token
-          }),
-          mode: 'cors',
-          method: 'GET'
-        })
-      .then(res => res.json())
-      .then(res =>
-        dispatch({
-          type: "ASSO_PAGE_GET_ALL_PARKING_LOTS",
-          payload: res
-        }))
-      .then(
-        dispatch({
-          type: "ASSO_PAGE_MAP_LOT_KEY",
-          payload: ''
-        }))
-      .then(console.log("refreshed"))
   },
 
   getInitData: (token) => {
-    // console.log("get init data")
     ParkingBoysResource.getAll(token)
       .then(res => res.json())
       .then(res => {
@@ -266,11 +258,14 @@ const mapDispatchToProps = dispatch => ({
             dispatch({
               type: "ASSO_PAGE_GET_ALL_PARKING_LOTS",
               payload: res
-            });
+            })
+          })
+          .then(() => {
             dispatch({
               type: "ASSO_PAGE_MAP_LOT_KEY",
               payload: ''
-            });
+            })
+            console.log("finish")
           }));
   },
   getParkingLots: (token) => {
@@ -295,23 +290,6 @@ const mapDispatchToProps = dispatch => ({
         });
       });
   },
-  // getParkingLotsByEmployee: (employeeId) => {
-  //   fetch("d?employeeId=" + employeeId, {
-  //     //getInitData: fetch("http://localhost:8081/orders", {
-  //     headers: new Headers({
-  //       'Content-Type': 'application/json'
-  //     }),
-  //     mode: 'cors',
-  //     method: 'GET'
-  //   })
-  //     .then(res => res.json())
-  //     .then(res => {
-  //       dispatch({
-  //         type: "ASSO_PAGE_GET_PARKING_LOTS_BY_EMPLOYEE",
-  //         payload: res
-  //       });
-  //     });
-  // }
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(BoyLotAssoPage);

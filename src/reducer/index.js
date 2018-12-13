@@ -68,7 +68,11 @@ export default (state = initialState, { type, payload }) => {
 
     case "ASSO_PAGE_MAP_LOT_KEY": {
       const parkingBoysForAsso = state.parkingBoys.map((boy) => {
-        const parkingLotIds = boy.parkingLots.map(lot => {
+        let parkingLots = boy.parkingLots
+        if (parkingLots == null) {
+          parkingLots = [];
+        }
+        const parkingLotIds = parkingLots.map(lot => {
           return lot.parkingLotId
         });
 
