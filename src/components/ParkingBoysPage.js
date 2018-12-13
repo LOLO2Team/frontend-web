@@ -80,6 +80,15 @@ class ParkingBoysPage extends Component {
     }
   }
 
+  componentWillMount() {
+    this.props.getAllData(this.props.token);
+  }
+  componentDidMount() {
+    this.interval = setInterval(() => this.props.getAllData(this.props.token), 1000);
+  }
+  componentWillUnmount() {
+    clearInterval(this.interval);
+  }
   render() {
     return (
       <div>
@@ -134,7 +143,7 @@ const mapDispatchToProps = dispatch => ({
       }
       )
   },
-  getAllData: (token) => {
+  getAllData: (token) => 
     ParkingBoysResource.getAllEmployees(token)
       .then(res => res.json())
       .then(res => {
@@ -143,7 +152,7 @@ const mapDispatchToProps = dispatch => ({
           payload: res
         });
       })
-  },
+  ,
   getAllEmployees: (token) =>{
     return fetch("https://parking-lot-backend.herokuapp.com/employees", {
         //getInitData: fetch("http://localhost:8081/orders", {
