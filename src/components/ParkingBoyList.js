@@ -8,7 +8,7 @@ class ParkingBoyList extends Component {
   constructor(props) {
     super(props);
     this.props.getInitData(this.props.token);
-    console.log(this.props.parkingBoys)
+    // console.log(this.props.parkingBoys)
   }
   state = {
     visible: false,
@@ -86,6 +86,7 @@ class ParkingBoyList extends Component {
       dataIndex: 'rolesList',
       render: (text, record) => (
         <span>
+          {/* {console.log(record.rolesList)} */}
            {record.rolesList.map(role => <Tag color="blue" key={role}>{role}</Tag>)}
         </span>
       ),
@@ -119,15 +120,15 @@ class ParkingBoyList extends Component {
       ),
     }];
 
-  componentWillMount() {
-    this.props.getInitData(this.props.token);
-  }
-  componentDidMount() {
-    this.interval = setInterval(() => this.props.getInitData(this.props.token), 1000);
-  }
-  componentWillUnmount() {
-    clearInterval(this.interval);
-  }
+  // componentWillMount() {
+  //   this.props.getInitData(this.props.token);
+  // }
+  // componentDidMount() {
+  //   this.interval = setInterval(() => this.props.getInitData(this.props.token), 1000);
+  // }
+  // componentWillUnmount() {
+  //   clearInterval(this.interval);
+  // }
   render() {
     return (
       <div>
