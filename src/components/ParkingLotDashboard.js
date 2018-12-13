@@ -6,8 +6,9 @@ import { connect } from "react-redux";
 class ParkingLotDashboard extends Component {
   showDashboard = () => {
     const newLots = this.props.parkingLots.map((lot)=> {
+      const percent = (lot.capacity - lot.parkedCount)/lot.capacity
       return  <div>
-                <Progress type="dashboard" percent={50} format={(number,total) => `${lot.capacity - lot.parkedCount} /${lot.capacity}`} />
+                <Progress type="dashboard" percent={percent*100} format={(number,total) => `${lot.capacity - lot.parkedCount} /${lot.capacity}`} />
                 <span>Parking Lot Name:{lot.parkingLotName}</span>
                 <span>Parking Lot ID:{lot.parkingLotId}</span>
                 <span>Assigned Parking Boy ID:{lot.employeeId}</span>
