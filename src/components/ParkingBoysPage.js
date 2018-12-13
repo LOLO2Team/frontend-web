@@ -12,6 +12,7 @@ const FormItem = Form.Item;
 class ParkingBoysPage extends Component {
   state = {
     visible: false,
+    canSearch: true,
     searchValue: ''
   };
 
@@ -44,31 +45,32 @@ class ParkingBoysPage extends Component {
     this.setState({ searchValue: e.target.value });
   }
 
-  keyPress = (e) => {
-    if (e.keyCode == 13) {
-      // console.log(this.state.searchValue)…
-      this.props.searchBoy(this.state.searchValue, this.props.token)
-      //  console.log('value', e.target.value);
-      // put the login here
-    }
-  }
-  getAllData = (e) =>{
-    this.setState({searchValue:''});
-    this.props.getAllData(this.props.token);
+  searchEmployee = (e) => {
+    console.log(e.target.value);
+    this.setState({ canSearch: false });
+    this.setState({ searchValue: e.target.value });
+    this.props.searchBoy(this.state.searchValue, this.props.token)
   }
 
-  // onClickSwitchRoleButton = () => {
-  //   if (this.props.myRole === "manager") {
-  //     this.props.switchMyRole("HR");
-  //   } else {
-  //     this.props.switchMyRole("manager");
-  //   }
-  // }
-  // renderIfHR = () => {
-  //   if (this.props.myRole === "HR") {
-  //     return <CreateParkingBoy />
-  //   }
-  // }
+  getAllData = (e) => {
+    this.setState({ searchValue: '' });
+    this.props.getAllData(this.props.token);
+    this.setState({ canSearch: true });
+  }
+
+  showSearch = () => {
+    if (this.state.canSearch) {
+      return <div className="search">
+        <Input className="input-search" placeholder="Search"
+          onChange={this.handleChange}
+          value={this.state.searchValue} />
+        <Button type="primary" className="search" onClick={this.searchEmployee}>Search</Button>
+      </div>
+    }
+    return <div className="search">
+      <Button className="clear" onClick={this.getAllData}>Clear</Button>
+    </div>
+  }
 
   render() {
     return (
@@ -77,18 +79,24 @@ class ParkingBoysPage extends Component {
           margin: '24px 16px', padding: 24, background: '#fff', minHeight: 280,
         }}
         >
-          <Button className="margin-bottom-15" type="primary" onClick={this.showModal}>Create Parking Boy</Button>
+          <div className="action-row">
+            <Button className="margin-bottom-15" type="primary" onClick={this.showModal}>Create Parking Boy</Button>
+            {this.showSearch()}
+          </div>
+
+
+
+
+
+
           <CreateParkingBoy
             wrappedComponentRef={this.saveFormRef}
             visible={this.state.visible}
             onCancel={this.handleCancel}
             onCreate={this.handleCreate}
           />
-          <Input placeholder="Search"
-            onKeyDown={this.keyPress}
-            onChange={this.handleChange}
-          />
-          {/* <Button onClick={this.getAllData}>Clear</Button> */}
+
+
           {/* <Button
             type="primary"
             htmlType="submit"
@@ -142,15 +150,15 @@ const mapDispatchToProps = dispatch => ({
       }
       )
   },
-  getAllData:(token)=>{
+  getAllData: (token) => {
     ParkingBoysResource.getAll(token)
-    .then(res => res.json())
-    .then(res => {
-      dispatch({
-        type: "SET_PARKING_BOYS",
-        payload: res
-      });
-    })
+      .then(res => res.json())
+      .then(res => {
+        dispatch({
+          type: "SET_PARKING_BOYS",
+          payload: res
+        });
+      })
   }
 
 
