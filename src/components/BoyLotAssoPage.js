@@ -98,9 +98,15 @@ class BoyLotAssoPage extends Component {
     // console.log('targetKeys: ', nextTargetKeys);
     // console.log('direction: ', direction);
     // console.log('moveKeys: ', moveKeys);
-    for (var index = 0; index < moveKeys.length; index++) {
-      this.props.assignLotToBoys(this.props.token, this.props.parkingLotsForAsso[moveKeys[index]].description, this.props.selectedEmployeeId)
-    }
+    if (direction === "right")
+      for (var index = 0; index < moveKeys.length; index++) {
+        this.props.assignLotToBoys(this.props.token, this.props.parkingLotsForAsso[moveKeys[index]].description, this.props.selectedEmployeeId)
+      }
+    if (direction === "left")
+      for (var index = 0; index < moveKeys.length; index++) {
+        this.props.unAssignLotToBoys(this.props.token, this.props.parkingLotsForAsso[moveKeys[index]].description, this.props.selectedEmployeeId)
+      }
+    
     this.props.getInitData(this.props.token);
   }
 
@@ -230,6 +236,25 @@ const mapDispatchToProps = dispatch => ({
         alert("boy-lot asso created");
       } else {
         alert(res.status + " error occurred when assigning parking lot");
+      }
+    });
+  },
+
+  unAssignLotToBoys: (token, lotId, employeeId) => {
+    fetch("https://parking-lot-backend.herokuapp.com/parkinglots/" + lotId + "/employeeId", {
+      headers: new Headers({
+        'Content-Type': 'application/json',
+        'Authorization': token
+      }),
+      mode: 'cors',
+      method: 'DELETE'
+    })
+    // .then(res => res.json())
+    .then(res => {
+      if (res.status === 201) {
+        alert("boy-lot asso deleted");
+      } else {
+        alert(res.status + " error occurred when unassigning parking lot");
       }
     });
   },
