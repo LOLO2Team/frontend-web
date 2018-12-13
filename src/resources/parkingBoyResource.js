@@ -66,8 +66,13 @@ export default {
                 "username": value.username,
                 "password": value.password,
                 "phone": value.phone,
-                "email": value.email
-                // "role": role
+                "email": value.email,
+                "authorities" :
+                    [
+                        {
+                            "name": "ROLE_PARKING_CLERK"
+                        }
+                    ]
             }),
             mode: 'cors',
             method: 'POST'
