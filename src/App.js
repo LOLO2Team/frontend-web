@@ -47,12 +47,12 @@ class App extends Component {
                 <Link to="/asso-parkingBoys-parkingLots">Association</Link>
               </Menu.Item>
               <Menu.Item key="4">
-                <i class="fas fa-link"></i>
-                <span class="nav-padding">ParkingLotDashboard</span>
-                <Link to="/parkingLotDashboard">ParkingLotDashboard</Link>
+              <i class="fas fa-tachometer-alt"></i>
+                <span class="nav-padding">Lot Dashboard</span>
+                <Link to="/parkingLotDashboard">Lot Dashboard</Link>
               </Menu.Item>
               <Menu.Item key="5">
-                <i class="fas fa-link"></i>
+              <i class="fas fa-clipboard-list"></i>
                 <span class="nav-padding">Orders</span>
                 <Link to="/orders">Orders</Link>
               </Menu.Item>
