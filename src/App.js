@@ -28,8 +28,8 @@ class App extends Component {
             collapsible
             collapsed={this.state.collapsed}
           >
-            <div className="logo" />
-            <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
+            <div className="logo"><h2>LOLO2</h2></div>
+            <Menu className="sider"theme="dark" mode="inline" defaultSelectedKeys={['1']}>
               <Menu.Item key="1">
                 <Icon type="user" />
                 <span>Parking Boys</span>
@@ -37,12 +37,12 @@ class App extends Component {
               </Menu.Item>
               <Menu.Item key="2">
                 <i class="fab fa-product-hunt"></i>
-                <span class="nav-padding">Parking Lots</span>
+                <span className="nav-padding">Parking Lots</span>
                 <Link to="/parkingLots">Parking Lots</Link>
               </Menu.Item>
               <Menu.Item key="3">
                 <i class="fas fa-link"></i>
-                <span class="nav-padding">Association</span>
+                <span className="nav-padding">Association</span>
                 <Link to="/asso-parkingBoys-parkingLots">Association</Link>
               </Menu.Item>
               <Menu.Item key="4">
@@ -53,13 +53,13 @@ class App extends Component {
             </Menu>
           </Sider>
           <Layout>
-            <Header style={{ background: '#fff', padding: 0 }}>
-              <Icon
+            <Header className="header" style={{ background: '#fff', padding: 0 }}>
+              {/* <Icon
                 className="trigger"
                 type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'}
                 onClick={this.toggle}
-              />
-              This is a Title
+              /> */}
+              <h2>LOLO2's Parking System</h2>
             </Header>
             <Switch>
               <Route path="/parkingLots" component={ParkingLotsPage} />
