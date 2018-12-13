@@ -25,6 +25,7 @@ export default (state = initialState, { type, payload }) => {
         parkingLots: payload.map((lot, index) => {
           return {
             key: index,
+            parkedCount: lot.parkedCount,
             parkingLotId: lot.parkingLotId,
             parkingLotName: lot.parkingLotName,
             capacity: lot.capacity,

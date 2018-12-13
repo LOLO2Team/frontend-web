@@ -3,6 +3,7 @@ import { Layout, Menu, Icon } from 'antd';
 import ParkingBoysPage from './components/ParkingBoysPage'
 import ParkingLotsPage from './components/ParkingLotsPage'
 import BoyLotAssoPage from './components/BoyLotAssoPage'
+import ParkingLotDashboard from './components/ParkingLotDashboard'
 import { Switch, Route, Link } from 'react-router-dom';
 import Login from './components/Login';
 
@@ -44,6 +45,11 @@ class App extends Component {
                 <span class="nav-padding">Association</span>
                 <Link to="/asso-parkingBoys-parkingLots">Association</Link>
               </Menu.Item>
+              <Menu.Item key="4">
+                <i class="fas fa-link"></i>
+                <span class="nav-padding">ParkingLotDashboard</span>
+                <Link to="/parkingLotDashboard">ParkingLotDashboard</Link>
+              </Menu.Item>
             </Menu>
           </Sider>
           <Layout>
@@ -59,7 +65,8 @@ class App extends Component {
               <Route path="/parkingLots" component={ParkingLotsPage} />
               <Route path="/asso-parkingBoys-parkingLots" component={BoyLotAssoPage} />
               <Route path="/parkingBoys" component={ParkingBoysPage} />
-              <Route component={ParkingLotsPage} />
+              <Route path="/parkingLotDashboard" component={ParkingLotDashboard}/>
+              <Route component={ParkingBoysPage}/>
             </Switch>
           </Layout>
         </Layout>
