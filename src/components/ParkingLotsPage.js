@@ -60,6 +60,18 @@ class ParkingLotsPage extends Component {
   //     }
   //   });
   // }
+  renderCreateParkingLotButton = () => {
+    if (this.props.myRole.includes("ROLE_MANAGER")) {
+      return <div><Button className="margin-bottom-15" type="primary" onClick={this.showModal}>Create Parking Lot</Button>
+      <CreateParkingLot
+        wrappedComponentRef={this.saveFormRef}
+        visible={this.state.visible}
+        onCancel={this.handleCancel}
+        onCreate={this.handleCreate}
+      /></div>
+    }
+  }
+  
   render() {
     const {
       getFieldDecorator, getFieldsError, getFieldError, isFieldTouched,
@@ -73,14 +85,7 @@ class ParkingLotsPage extends Component {
           margin: '24px 16px', padding: 24, background: '#fff', minHeight: 280,
         }}
         >
-          <Button className="margin-bottom-15" type="primary" onClick={this.showModal}>Create Parking Lot</Button>
-          <CreateParkingLot
-            wrappedComponentRef={this.saveFormRef}
-            visible={this.state.visible}
-            onCancel={this.handleCancel}
-            onCreate={this.handleCreate}
-          />
-
+          {this.renderCreateParkingLotButton()}
           <ParkingLotList />
         </Content>
       </div >
@@ -89,7 +94,7 @@ class ParkingLotsPage extends Component {
 }
 
 const mapStateToProps = state => ({
-  // myRole: state.myRole,
+  myRole: state.myRole,
   token: state.token
 })
 
