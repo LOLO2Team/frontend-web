@@ -34,6 +34,37 @@ class EditParkingBoy extends Component {
       role: role
     } });
   }
+
+  showRole = () =>{
+    console.log("myRole"+this.props.myRole)
+    if(this.props.myRole=='ROLE_ADMIN'){
+      return <FormItem
+      label="Role">
+      <Select defaultValue={this.props.rolesList} style={{ width: 200 }} onChange={this.handleRoleChange}>
+        <Option value="ROLE_EMPLOYEE">EMPLOYEE</Option>
+        <Option value="ROLE_PARKING_CLERK">PARKING CLERK</Option>
+        <Option value="ROLE_MANAGER">MANAGER</Option>
+        <Option value="ROLE_ADMIN" >ADMIN</Option>
+        <Option value="ROLE_HR">HR</Option>
+      </Select>
+    </FormItem>
+    }
+  }
+
+  showStatus = () =>{
+    if(this.props.myRole=='ROLE_MANAGER'){
+      return <FormItem
+      label="Status">
+      <Select defaultValue={this.props.status} style={{ width: 200 }} onChange={this.handleChange}>
+        <Option value="WORKING">WORKING</Option>
+        <Option value="LEAVE">LEAVE</Option>
+        <Option value="OFFDUTY">OFFDUTY</Option>
+        <Option value="FROZEN" >FROZEN</Option>
+        <Option value="QUIT">QUIT</Option>
+      </Select>
+    </FormItem>
+    }
+  }
   
 
   // handleSubmit = (e) => {
@@ -79,26 +110,8 @@ class EditParkingBoy extends Component {
               label="Phone">
               <span>{this.props.phone}</span>
             </FormItem>
-            <FormItem
-              label="Role">
-              <Select defaultValue={this.props.rolesList} style={{ width: 200 }} onChange={this.handleRoleChange}>
-                <Option value="ROLE_EMPLOYEE">EMPLOYEE</Option>
-                <Option value="ROLE_PARKING_CLERK">PARKING CLERK</Option>
-                <Option value="ROLE_MANAGER">MANAGER</Option>
-                <Option value="ROLE_ADMIN" >ADMIN</Option>
-                <Option value="ROLE_HR">HR</Option>
-              </Select>
-            </FormItem>
-            <FormItem
-              label="Status">
-              <Select defaultValue={this.props.status} style={{ width: 200 }} onChange={this.handleChange}>
-                <Option value="WORKING">WORKING</Option>
-                <Option value="LEAVE">LEAVE</Option>
-                <Option value="OFFDUTY">OFFDUTY</Option>
-                <Option value="FROZEN" >FROZEN</Option>
-                <Option value="QUIT">QUIT</Option>
-              </Select>
-            </FormItem>
+            {this.showRole()}
+            {this.showStatus()}
           </Form>
         </Modal>
       </div>
@@ -107,7 +120,8 @@ class EditParkingBoy extends Component {
 }
 
 const mapStateToProps = state => ({
-  token: state.token
+  token: state.token,
+  myRole: state.rolesList
 })
 
 const mapDispatchToProps = dispatch => ({
