@@ -8,7 +8,8 @@ const initialState = {
   selectedEmployeeId: 0,
   parkingBoysForAsso: [],
   parkingLotsForAsso: [],
-  myRole: []
+  myRole: [],
+  orders: []
 }
 
 export default (state = initialState, { type, payload }) => {
@@ -25,6 +26,30 @@ export default (state = initialState, { type, payload }) => {
       return {
         ...state,
         myRole: payload
+      }
+    }
+
+    case "SET_ORDERS": {
+      const orders = payload.map(order => {
+        const parkingLot = state.parkingLots.find(lot => {
+          if (lot.parkingLotId === order.parkingLotId) {
+            return lot;
+          }
+        });
+        const parkingLotName = parkingLot == null ? null : parkingLot.parkingLotName;
+
+        return {
+          orderId: order.orderId,
+          vehicleNumber: order.vehicleNumber,
+          parkingLotId: order.parkingLotId,
+          parkingLotName: parkingLotName,
+          employeeId: order.employeeId,
+          orderStatus: order.orderStatus
+        }
+      })
+      return {
+        ...state,
+        orders: orders
       }
     }
 

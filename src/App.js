@@ -6,6 +6,7 @@ import BoyLotAssoPage from './components/BoyLotAssoPage'
 import ParkingLotDashboard from './components/ParkingLotDashboard'
 import { Switch, Route, Link } from 'react-router-dom';
 import Login from './components/Login';
+import OrdersPage from './components/OrdersPage';
 
 const { Header, Sider, Content } = Layout;
 
@@ -50,6 +51,11 @@ class App extends Component {
                 <span class="nav-padding">ParkingLotDashboard</span>
                 <Link to="/parkingLotDashboard">ParkingLotDashboard</Link>
               </Menu.Item>
+              <Menu.Item key="5">
+                <i class="fas fa-link"></i>
+                <span class="nav-padding">Orders</span>
+                <Link to="/orders">Orders</Link>
+              </Menu.Item>
             </Menu>
           </Sider>
           <Layout>
@@ -66,6 +72,7 @@ class App extends Component {
               <Route path="/asso-parkingBoys-parkingLots" component={BoyLotAssoPage} />
               <Route path="/parkingBoys" component={ParkingBoysPage} />
               <Route path="/parkingLotDashboard" component={ParkingLotDashboard}/>
+              <Route path="/orders" component={OrdersPage}/>
               <Route component={ParkingBoysPage}/>
             </Switch>
           </Layout>
