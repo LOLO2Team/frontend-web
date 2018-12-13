@@ -46,7 +46,7 @@ class CreateParkingBoy extends Component {
       <div>
         <Modal
           visible={visible}
-          title="Create a new Parking Boy"
+          title="Create a new Employee"
           okText="Create"
           onCancel={onCancel}
           onOk={onCreate}

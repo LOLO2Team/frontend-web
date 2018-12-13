@@ -8,6 +8,7 @@ class ParkingBoyList extends Component {
   constructor(props) {
     super(props);
     this.props.getInitData(this.props.token);
+    console.log(this.props.parkingBoys)
   }
   state = {
     visible: false,
@@ -29,15 +30,19 @@ class ParkingBoyList extends Component {
     this.setState({ visible: false });
   }
 
-  handleCreate = (value) => {
+  handleCreate = (value,role) => {
     const form = this.formRef.props.form;
+    console.log(value);
     form.validateFields((err, values) => {
       console.log(values)
       if (err) {
         return;
       }
-      console.log('Received values of form: ', value);
-      this.props.editEmployee(this.state.id, value, this.props.token);
+      console.log('Received value of form: ', value.status);
+      console.log('Received role of form: ', value.role);
+
+      this.props.editEmployee(this.state.id, value.status, this.props.token);
+      this.props.editEmployeeRole(this.state.id, value.role, this.props.token);
       form.resetFields();
       this.setState({ visible: false });
     });
@@ -56,7 +61,7 @@ class ParkingBoyList extends Component {
     this.setState({ id, name, username, email, phone, rolesList, status });
     this.showModal()
   }
-
+  
   columns = [
     {
       title: 'Name',
@@ -147,14 +152,15 @@ class ParkingBoyList extends Component {
 
 const mapStateToProps = state => ({
   parkingBoys: state.parkingBoys,
-  token: state.token
+  token: state.token,
+  rolesList: state.rolesList
 });
 
 const mapDispatchToProps = dispatch => ({
   getInitData: (token) => ParkingBoysResource.getAllEmployees(token)
     .then(res => res.json())
     .then(res => {
-      console.log(res[0])
+      // console.log(res[0])
       dispatch({
         type: "SET_PARKING_BOYS",
         payload: res
@@ -165,6 +171,9 @@ const mapDispatchToProps = dispatch => ({
   },
   editEmployee: (id, status, token) => {
     ParkingBoysResource.editEmployee(id, status, token)
+  },
+  editEmployeeRole: (id, role, token) =>{
+    ParkingBoysResource.editEmployeeRole(id,role,token)
   }
 });
 

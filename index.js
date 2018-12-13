@@ -7,9 +7,7 @@ const initialState = {
   authorized: false,
   selectedEmployeeId: 0,
   parkingBoysForAsso: [],
-  parkingLotsForAsso: [],
-  myRole: [],
-  orders: []
+  parkingLotsForAsso: []
 }
 
 export default (state = initialState, { type, payload }) => {
@@ -26,30 +24,6 @@ export default (state = initialState, { type, payload }) => {
       return {
         ...state,
         myRole: payload
-      }
-    }
-
-    case "SET_ORDERS": {
-      const orders = payload.map(order => {
-        const parkingLot = state.parkingLots.find(lot => {
-          if (lot.parkingLotId === order.parkingLotId) {
-            return lot;
-          }
-        });
-        const parkingLotName = parkingLot == null ? null : parkingLot.parkingLotName;
-
-        return {
-          orderId: order.orderId,
-          vehicleNumber: order.vehicleNumber,
-          parkingLotId: order.parkingLotId,
-          parkingLotName: parkingLotName,
-          employeeId: order.employeeId,
-          orderStatus: order.orderStatus
-        }
-      })
-      return {
-        ...state,
-        orders: orders
       }
     }
 
@@ -95,11 +69,7 @@ export default (state = initialState, { type, payload }) => {
 
     case "ASSO_PAGE_MAP_LOT_KEY": {
       const parkingBoysForAsso = state.parkingBoys.map((boy) => {
-        let parkingLots = boy.parkingLots
-        if (parkingLots == null) {
-          parkingLots = [];
-        }
-        const parkingLotIds = parkingLots.map(lot => {
+        const parkingLotIds = boy.parkingLots.map(lot => {
           return lot.parkingLotId
         });
 
@@ -153,28 +123,25 @@ export default (state = initialState, { type, payload }) => {
     }
 
     case "SET_PARKING_BOYS": {
+      console.log(payload);
+      const parkingBoys = payload.map((boy, index) => {
+        console.log(boy)
+        return {
+          key: index,
+          employeeId: boy.employeeId,
+          name: boy.name,
+          username: boy.username,
+          email: boy.email,
+          phone: boy.phone,
+          rolesList: boy.rolesList,
+          status: boy.status,
+          parkingLots: boy.parkingLotResponses,
+          role: "abc, abc"
+        }
+      })
       return {
         ...state,
-        parkingBoys: payload.map((boy, index) => {
-          return {
-            key: index,
-            employeeId: boy.employeeId,
-            name: boy.name,
-            username: boy.username,
-            email: boy.email,
-            phone: boy.phone,
-            rolesList: boy.rolesList,
-            status: boy.status,
-            parkingLots: boy.parkingLotResponses
-          }
-        })
-      }
-    }
-
-    case "SWITCH_MY_ROLE": {
-      return {
-        ...state,
-        myRole: payload
+        parkingBoys: parkingBoys
       }
     }
 
