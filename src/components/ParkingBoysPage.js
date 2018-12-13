@@ -76,7 +76,7 @@ class ParkingBoysPage extends Component {
     // console.log(this.props.rolesList)
     console.log("role" + this.props.role)
     if (this.props.role == "ROLE_HR") {
-      return <Button className="margin-bottom-15" type="primary" onClick={this.showModal}>Create Parking Boy</Button>
+      return <Button className="margin-bottom-15" type="primary" onClick={this.showModal}>Create New User</Button>
     }
   }
 
@@ -121,6 +121,15 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   createBoy: (values, token) => {
     ParkingBoysResource.createBoy(values, token)
+    .then(res => {
+      if (res.status === 201) {
+        alert("Employee created");
+      } else if (res.status === 403)
+        alert("You are not authorized to do the action");      
+      else {
+        alert(res.status + " error has occurred");
+      }
+    })
   },
 
   searchBoy: (value, token) => {
