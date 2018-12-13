@@ -78,3 +78,19 @@ code {
 .sider span{
   font-size:16px;
 }
+
+.action-row{
+  margin-bottom: 20px;
+  display: flex;
+}
+
+div.search{
+  margin-left: auto;
+  display: flex;
+}
+
+.action-row button, .action-row .input-search{
+  display: inline-block;
+  margin: 0 3px;
+}
+
