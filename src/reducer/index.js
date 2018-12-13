@@ -1,7 +1,8 @@
 const initialState = {
   parkingLots: [],
   parkingBoys: [],
-  myRole: [],
+  rolesList: [],
+  role: '',
   token: '',
   authorized: false,
   selectedEmployeeId: 0,
@@ -155,6 +156,14 @@ export default (state = initialState, { type, payload }) => {
       return {
         ...state,
         authorized: true
+      }
+    }
+
+    case "SET_ROLE" : {
+      return{
+        ...state,
+        rolesList:payload,
+        role:payload[0]
       }
     }
 

@@ -64,19 +64,19 @@ class EditParkingBoy extends Component {
               label="Phone">
               <span>{this.props.phone}</span>
             </FormItem>
-            {/* <FormItem
+            <FormItem
               label="Role">
-              <Select defaultValue={this.props.role} style={{ width: 120 }} onChange={this.handleChange}>
+              <Select defaultValue={this.props.rolesList} style={{ width: 200 }} onChange={this.handleChange}>
                 <Option value="ROLE_EMPLOYEE">EMPLOYEE</Option>
                 <Option value="ROLE_PARKING_CLERK">PARKING CLERK</Option>
                 <Option value="ROLE_MANAGER">MANAGER</Option>
                 <Option value="ROLE_ADMIN" >ADMIN</Option>
                 <Option value="ROLE_HR">HR</Option>
               </Select>
-            </FormItem> */}
+            </FormItem>
             <FormItem
               label="Status">
-              <Select defaultValue={this.props.status} style={{ width: 120 }} onChange={this.handleChange}>
+              <Select defaultValue={this.props.status} style={{ width: 200 }} onChange={this.handleChange}>
                 <Option value="WORKING">WORKING</Option>
                 <Option value="LEAVE">LEAVE</Option>
                 <Option value="OFFDUTY">OFFDUTY</Option>

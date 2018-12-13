@@ -72,6 +72,14 @@ class ParkingBoysPage extends Component {
     </div>
   }
 
+  showCreateParkingBoy = () => {
+    // console.log(this.props.rolesList)
+    console.log("role" + this.props.role)
+    if (this.props.role == "ROLE_HR") {
+      return <Button className="margin-bottom-15" type="primary" onClick={this.showModal}>Create Parking Boy</Button>
+    }
+  }
+
   render() {
     return (
       <div>
@@ -80,15 +88,9 @@ class ParkingBoysPage extends Component {
         }}
         >
           <div className="action-row">
-            <Button className="margin-bottom-15" type="primary" onClick={this.showModal}>Create Parking Boy</Button>
+            {this.showCreateParkingBoy()}
             {this.showSearch()}
           </div>
-
-
-
-
-
-
           <CreateParkingBoy
             wrappedComponentRef={this.saveFormRef}
             visible={this.state.visible}
@@ -96,17 +98,6 @@ class ParkingBoysPage extends Component {
             onCreate={this.handleCreate}
           />
 
-
-          {/* <Button
-            type="primary"
-            htmlType="submit"
-            // disabled={hasErrors(getFieldsError())}
-            onClick={this.onClickSwitchRoleButton}
-          >
-            Switch to {this.props.myRole === "manager" ? " HR" : " manager"}
-          </Button> */}
-
-          {/* {this.renderIfHR()} */}
           <ParkingBoyList />
         </Content>
       </div>
@@ -114,18 +105,11 @@ class ParkingBoysPage extends Component {
   }
 }
 const mapStateToProps = state => ({
-  myRole: state.myRole,
-  token: state.token
+  token: state.token,
+  role: state.role
 })
 
 const mapDispatchToProps = dispatch => ({
-  switchMyRole: (newRole) => {
-    dispatch({
-      type: "SWITCH_MY_ROLE",
-      payload: newRole
-    })
-  },
-
   createBoy: (values, token) => {
     ParkingBoysResource.createBoy(values, token)
   },
@@ -159,7 +143,18 @@ const mapDispatchToProps = dispatch => ({
           payload: res
         });
       })
-  }
+  },
+  getAllEmployees: (token) =>{
+    return fetch("https://parking-lot-backend.herokuapp.com/employees", {
+        //getInitData: fetch("http://localhost:8081/orders", {
+        headers: new Headers({
+            'Content-Type': 'application/json',
+            'Authorization': token
+        }),
+        mode: 'cors',
+        method: 'GET'
+    })
+}
 
 
 })

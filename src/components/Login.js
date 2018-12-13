@@ -113,10 +113,14 @@ const mapDispatchToProps = dispatch => ({
           return false;
         }
         const rolesList = res.rolesList;
-        if (rolesList.includes("ROLE_ADMIN") || rolesList.includes("ROLE_MANAGER")) {
+        if (rolesList.includes("ROLE_ADMIN") || rolesList.includes("ROLE_MANAGER") || rolesList.includes("ROLE_HR")) {
           dispatch({
             type: "SET_AUTHORIZED",
             payload: ''
+          });
+          dispatch({
+            type: "SET_ROLE",
+            payload: rolesList
           });
           dispatch({
             type: "SET_MY_ROLE",
