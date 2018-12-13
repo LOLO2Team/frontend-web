@@ -11,6 +11,17 @@ export default {
         })
 
     },
+    getAllEmployees: (token) => {
+        return fetch("https://parking-lot-backend.herokuapp.com/employees", {
+            //getInitData: fetch("http://localhost:8081/orders", {
+            headers: new Headers({
+                'Content-Type': 'application/json',
+                'Authorization': token
+            }),
+            mode: 'cors',
+            method: 'GET'
+        })
+    },
     // getAllParkingBoy: (token, dispatch) => {
     //     return fetch("https://parking-lot-backend.herokuapp.com/parkingboys", {
     //         //getInitData: fetch("http://localhost:8081/orders", {
@@ -54,6 +65,19 @@ export default {
         })
             .then(res => console.log(res))
     },
+    editEmployeeRole:(id, role, token) => {
+        console.log("api")
+        return fetch("https://parking-lot-backend.herokuapp.com/employees/"+id+"/roles/"+role, {
+            //getInitData: fetch("http://localhost:8081/orders", {
+            headers: new Headers({
+                'Content-Type': 'application/json',
+                'Authorization': token
+            }),
+            mode: 'cors',
+            method: 'PUT'
+        })
+            .then(res => console.log(res))
+    },
     createBoy: (value, token) => {
         return fetch("https://parking-lot-backend.herokuapp.com/parkingboys", {
             //getInitData: fetch("http://localhost:8081/orders", {
@@ -67,7 +91,7 @@ export default {
                 "password": value.password,
                 "phone": value.phone,
                 "email": value.email,
-                "authorities" :
+                "authorities":
                     [
                         {
                             "name": "ROLE_PARKING_CLERK"

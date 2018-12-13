@@ -69,11 +69,7 @@ export default (state = initialState, { type, payload }) => {
 
     case "ASSO_PAGE_MAP_LOT_KEY": {
       const parkingBoysForAsso = state.parkingBoys.map((boy) => {
-        let parkingLots = boy.parkingLots
-        if (parkingLots == null) {
-          parkingLots = [];
-        }
-        const parkingLotIds = parkingLots.map(lot => {
+        const parkingLotIds = boy.parkingLots.map(lot => {
           return lot.parkingLotId
         });
 
@@ -127,28 +123,25 @@ export default (state = initialState, { type, payload }) => {
     }
 
     case "SET_PARKING_BOYS": {
+      console.log(payload);
+      const parkingBoys = payload.map((boy, index) => {
+        console.log(boy)
+        return {
+          key: index,
+          employeeId: boy.employeeId,
+          name: boy.name,
+          username: boy.username,
+          email: boy.email,
+          phone: boy.phone,
+          rolesList: boy.rolesList,
+          status: boy.status,
+          parkingLots: boy.parkingLotResponses,
+          role: "abc, abc"
+        }
+      })
       return {
         ...state,
-        parkingBoys: payload.map((boy, index) => {
-          return {
-            key: index,
-            employeeId: boy.employeeId,
-            name: boy.name,
-            username: boy.username,
-            email: boy.email,
-            phone: boy.phone,
-            rolesList: boy.rolesList,
-            status: boy.status,
-            parkingLots: boy.parkingLotResponses
-          }
-        })
-      }
-    }
-
-    case "SWITCH_MY_ROLE": {
-      return {
-        ...state,
-        myRole: payload
+        parkingBoys: parkingBoys
       }
     }
 

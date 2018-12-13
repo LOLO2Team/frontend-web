@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Layout, Form, Icon, Input, Button, Modal, Select } from 'antd';
 import { connect } from "react-redux";
 import ParkingBoyList from './ParkingBoyList'
+import ParkingBoysResource from '../resources/parkingBoyResource';
 const { Header, Sider, Content } = Layout;
 const FormItem = Form.Item;
 
@@ -13,23 +14,37 @@ function handleChange(value) {
 
 class EditParkingBoy extends Component {
   state = {
-    value: this.props.status
+    value: this.props.status,
+    role: this.props.role
   }
 
   handleChange = (value) => {
     console.log(`selected ${value}`);
-    this.setState({ value });
+    this.setState({ value:{
+      ...this.state.value,
+      status: value
+    } });
   }
 
-  handleSubmit = (e) => {
-    e.preventDefault();
-    this.props.form.validateFields((err, values) => {
-      if (!err) {
-        console.log('Received values of form: ', values);
-        this.onAddParkingBoy();
-      }
-    });
+  handleRoleChange = (role) => {
+    console.log(`selected ${role}`);
+    // this.setState({ role:value });
+    this.setState({ value:{
+      ...this.state.value,
+      role: role
+    } });
   }
+  
+
+  // handleSubmit = (e) => {
+  //   e.preventDefault();
+  //   this.props.form.validateFields((err, values) => {
+  //     if (!err) {
+  //       console.log('Received values of form: ', values);
+  //       this.onAddParkingBoy();
+  //     }
+  //   });
+  // }
 
   render() {
     const {
@@ -66,7 +81,7 @@ class EditParkingBoy extends Component {
             </FormItem>
             <FormItem
               label="Role">
-              <Select defaultValue={this.props.rolesList} style={{ width: 200 }} onChange={this.handleChange}>
+              <Select defaultValue={this.props.rolesList} style={{ width: 200 }} onChange={this.handleRoleChange}>
                 <Option value="ROLE_EMPLOYEE">EMPLOYEE</Option>
                 <Option value="ROLE_PARKING_CLERK">PARKING CLERK</Option>
                 <Option value="ROLE_MANAGER">MANAGER</Option>
@@ -98,7 +113,8 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   // editEmployee: (id, token) => {
   //   ParkingBoysResource.editEmployee(id, token)
-  // }
+  // },
+  
 });
 
 EditParkingBoy = Form.create({})(EditParkingBoy);
