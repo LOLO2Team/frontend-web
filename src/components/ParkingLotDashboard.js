@@ -27,8 +27,17 @@ class ParkingLotDashboard extends Component {
     })
     return newLots
   }
+  componentWillMount() {
+    this.props.getInitData(this.props.token);
+  }
+  componentDidMount() {
+    this.interval = setInterval(() => this.props.getInitData(this.props.token), 1000);
+  }
+  componentWillUnmount() {
+    clearInterval(this.interval);
+  }
   render() {
-    const dummy = this.props.getInitData
+    // const dummy = this.props.getInitData(this.props.token)
     return (
       <div className="flex-container">
         {this.showDashboard()}
@@ -43,7 +52,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  getInitData: fetch("https://parking-lot-backend.herokuapp.com/parkinglots", {
+  getInitData: token => fetch("https://parking-lot-backend.herokuapp.com/parkinglots", {
     //getInitData: fetch("http://localhost:8081/orders", {
     headers: new Headers({
       'Content-Type': 'application/json'
