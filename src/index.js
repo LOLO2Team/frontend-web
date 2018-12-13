@@ -10,7 +10,7 @@ import reducer from './reducer';
 import { Switch, Route } from 'react-router-dom';
 import Container from './Container';
 
-const store = createStore(reducer);
+const store = createStore(reducer,window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
 
 ReactDOM.render(
     <Provider store={store}>

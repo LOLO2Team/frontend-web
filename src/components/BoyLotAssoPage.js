@@ -94,7 +94,6 @@ class BoyLotAssoPage extends Component {
     // console.log('direction: ', direction);
     // console.log('moveKeys: ', moveKeys);
     for (var index=0; index<moveKeys.length; index++){
-      console.log(this.props.parkingLotsForAsso[moveKeys[index]])
       this.props.assignLotToBoys(this.props.token, this.props.parkingLotsForAsso[moveKeys[index]].description, this.props.selectedEmployeeId)
     }
   }
@@ -190,7 +189,6 @@ const mapDispatchToProps = dispatch => ({
   },
 
   assignLotToBoys: (token, lotId, employeeId) => {
-    console.log(employeeId)
     fetch("https://parking-lot-backend.herokuapp.com/parkinglots/"+ lotId +"/employeeId/"+ employeeId, {
       headers: new Headers({
         'Content-Type': 'application/json',

@@ -5,7 +5,19 @@ import parkingLotResource from '../resources/parkingLotResource';
 
 
 class ParkingLotList extends Component {
+    state = {
+        dummy: " "
+    }
   toggleLot = (id, status) => {
+      
+    console.log(id + " " + status)
+    if (status === "OPEN"){
+        status = "CLOSED"
+    }
+    else{
+        status = "OPEN"
+    }
+    console.log(id + " " + status)
     this.props.toggleLot(id, this.props.token, status)
   }
 
@@ -44,18 +56,10 @@ class ParkingLotList extends Component {
     title: 'Action',
     key: 'action',
     render: (text, record) => (
-      <span>
-        {/* <a href="javascript:;">Invite {record.name}</a>
-            <Divider type="vertical" />
-            <a href="javascript:;">Delete</a> */}
-        <Switch
-          unCheckedChildren="inactive"
-          checkedChildren="active"
+        <button
           // checked={true}
-          onChange={this.handleDisable}
-          style={{ marginTop: 16 }}
-        />
-      </span>
+          onClick={() =>this.toggleLot(record.parkingLotId, record.status)}
+        >Toggle</button>
     )
   }];
 
@@ -63,7 +67,10 @@ class ParkingLotList extends Component {
   render() {
     const dummy = this.props.getInitData;
     return (
-      <Table columns={this.columns} dataSource={this.props.parkingLots} />
+        <div>
+            <Table columns={this.columns} dataSource={this.props.parkingLots} />
+            {this.state.dummy}
+        </div>
     )
   }
 }
@@ -89,8 +96,23 @@ const mapDispatchToProps = dispatch => ({
         payload: res
       });
     }),
+
   toggleLot: (id, token, status) => {
     parkingLotResource.toggleLot(id, token, status)
+    fetch("https://parking-lot-backend.herokuapp.com/parkinglots", {
+        //getInitData: fetch("http://localhost:8081/orders", {
+        headers: new Headers({
+        'Content-Type': 'application/json'
+        }),
+        mode: 'cors',
+        method: 'GET'
+    }).then(res => res.json())
+    .then(res => {
+      dispatch({
+        type: "SET_PARKING_LOTS",
+        payload: res
+      });
+    })
   }
 });
 
