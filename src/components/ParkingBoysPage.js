@@ -12,6 +12,7 @@ const FormItem = Form.Item;
 class ParkingBoysPage extends Component {
   state = {
     visible: false,
+    searchValue: ''
   };
 
   showModal = () => {
@@ -39,6 +40,23 @@ class ParkingBoysPage extends Component {
     this.formRef = formRef;
   }
 
+  handleChange = (e) => {
+    this.setState({ searchValue: e.target.value });
+  }
+
+  keyPress = (e) => {
+    if (e.keyCode == 13) {
+      // console.log(this.state.searchValue)…
+      this.props.searchBoy(this.state.searchValue, this.props.token)
+      //  console.log('value', e.target.value);
+      // put the login here
+    }
+  }
+  getAllData = (e) =>{
+    this.setState({searchValue:''});
+    this.props.getAllData(this.props.token);
+  }
+
   // onClickSwitchRoleButton = () => {
   //   if (this.props.myRole === "manager") {
   //     this.props.switchMyRole("HR");
@@ -59,13 +77,18 @@ class ParkingBoysPage extends Component {
           margin: '24px 16px', padding: 24, background: '#fff', minHeight: 280,
         }}
         >
-        <Button className="margin-bottom-15" type="primary" onClick={this.showModal}>Create Parking Boy</Button>
-        <CreateParkingBoy
-          wrappedComponentRef={this.saveFormRef}
-          visible={this.state.visible}
-          onCancel={this.handleCancel}
-          onCreate={this.handleCreate}
-        />
+          <Button className="margin-bottom-15" type="primary" onClick={this.showModal}>Create Parking Boy</Button>
+          <CreateParkingBoy
+            wrappedComponentRef={this.saveFormRef}
+            visible={this.state.visible}
+            onCancel={this.handleCancel}
+            onCreate={this.handleCreate}
+          />
+          <Input placeholder="Search"
+            onKeyDown={this.keyPress}
+            onChange={this.handleChange}
+          />
+          {/* <Button onClick={this.getAllData}>Clear</Button> */}
           {/* <Button
             type="primary"
             htmlType="submit"
@@ -97,8 +120,39 @@ const mapDispatchToProps = dispatch => ({
 
   createBoy: (values, token) => {
     ParkingBoysResource.createBoy(values, token)
+  },
+
+  searchBoy: (value, token) => {
+    return fetch("https://parking-lot-backend.herokuapp.com/parkingboys/search?q=" + value, {
+      //getInitData: fetch("http://localhost:8081/orders", {
+      headers: new Headers({
+        'Content-Type': 'application/json',
+        'Authorization': token
+      }),
+      mode: 'cors',
+      method: 'GET'
+    })
+      .then(res => res.json())
+      // .then(res =>console.log(res))
+      .then(res => {
+        dispatch({
+          type: "SET_PARKING_BOYS",
+          payload: res
+        });
+      }
+      )
+  },
+  getAllData:(token)=>{
+    ParkingBoysResource.getAll(token)
+    .then(res => res.json())
+    .then(res => {
+      dispatch({
+        type: "SET_PARKING_BOYS",
+        payload: res
+      });
+    })
   }
-    
-  
+
+
 })
 export default connect(mapStateToProps, mapDispatchToProps)(ParkingBoysPage);
