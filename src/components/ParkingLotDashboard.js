@@ -5,30 +5,33 @@ import { connect } from "react-redux";
 
 class ParkingLotDashboard extends Component {
   showDashboard = () => {
-    const newLots = this.props.parkingLots.map((lot)=> {
-      const percent = (lot.capacity - lot.parkedCount)/lot.capacity
-      return  <div>
-                <Progress type="dashboard" percent={percent*100} format={(number,total) => `${lot.capacity - lot.parkedCount} /${lot.capacity}`} />
-                <span>Parking Lot Name:{lot.parkingLotName}</span>
-                <span>Parking Lot ID:{lot.parkingLotId}</span>
-                <span>Assigned Parking Boy ID:{lot.employeeId}</span>
-                <br></br>
-              </div>
+    const newLots = this.props.parkingLots.map((lot) => {
+      const percent = (lot.parkedCount / lot.capacity * 100)
+      // const percent1 = (5 / 10 * 100)
+      // console.log(percent1);
+      return <div>
+        <Card
+          hoverable
+          className="lot-card"
+          boardered
+        >
+          <Progress type="dashboard" className="dashboard-graph"
+          percent={percent} 
+          format={(number) => 
+          `${lot.parkedCount} /${lot.capacity}`} 
+          />
+          <p className="dashboard-desc"><label>Name:</label>{lot.parkingLotName}</p>
+          <p className="dashboard-desc"><label>ID:</label>{lot.parkingLotId}</p>
+          <p className="dashboard-desc"><label>Assigned Parking Boy ID:</label>{lot.employeeId}</p>
+          </Card></div>
     })
-    return  newLots
+    return newLots
   }
   render() {
     const dummy = this.props.getInitData
     return (
-      <div>
-        <Card
-          hoverable
-          style={{ width: 180 }}
-          boardered
-        >
+      <div className="flex-container">
         {this.showDashboard()}
-        </Card>,
-       
       </div>
     )
   }
