@@ -1,11 +1,11 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 import { Layout, Menu, Icon } from 'antd';
 import ParkingBoysPage from './components/ParkingBoysPage'
 import ParkingLotsPage from './components/ParkingLotsPage'
 import BoyLotAssoPage from './components/BoyLotAssoPage'
 import ParkingLotDashboard from './components/ParkingLotDashboard'
 import { Switch, Route, Link } from 'react-router-dom';
-import Login from './components/Login';
+import { connect } from "react-redux";
 import OrdersPage from './components/OrdersPage';
 
 const { Header, Sider, Content } = Layout;
@@ -65,7 +65,7 @@ class App extends Component {
                 type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'}
                 onClick={this.toggle}
               /> */}
-              <h2>LOLO2's Parking System</h2>
+              <h2>LOLO2's Parking System - {this.props.myRole}</h2>
             </Header>
             <Switch>
               <Route path="/parkingLots" component={ParkingLotsPage} />
@@ -82,4 +82,8 @@ class App extends Component {
   }
 }
 
-export default App;
+const mapStateToProps = state => ({
+  myRole: state.myRole
+})
+
+export default connect(mapStateToProps)(App);
