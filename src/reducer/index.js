@@ -20,59 +20,72 @@ export default (state = initialState, { type, payload }) => {
     }
 
     case "SET_PARKING_LOTS": {
+      const parkingLots = payload.map((lot, index) => {
+        return {
+          key: index,
+          parkingLotId: lot.parkingLotId,
+          parkingLotName: lot.parkingLotName,
+          capacity: lot.capacity,
+          reservedSpace: lot.reservedSpace,
+          employeeId: lot.employeeId,
+          status: lot.status
+        }
+      })
+      if (JSON.stringify(parkingLots) === JSON.stringify(state.parkingLots)) {
+        return state;
+      }
       return {
         ...state,
-        parkingLots: payload.map((lot, index) => {
-          return {
-            key: index,
-            parkingLotId: lot.parkingLotId,
-            parkingLotName: lot.parkingLotName,
-            capacity: lot.capacity,
-            reservedSpace: lot.reservedSpace,
-            employeeId: lot.employeeId,
-            status: lot.status
-          }
-        })
+        parkingLots
       }
     }
 
     case "ASSO_PAGE_GET_ALL_PARKING_LOTS": {
+      const parkingLotsForAsso = payload.map((lot, index) => {
+        return {
+          key: index,
+          title: lot.parkingLotName,
+          description: String(lot.parkingLotId)
+        }
+      });
+      
+      if (JSON.stringify(parkingLotsForAsso) === JSON.stringify(state.parkingLotsForAsso)) {
+        return state;
+      }
       return {
         ...state,
-        parkingLotsForAsso: payload.map((lot, index) => {
-          return {
-            key: index,
-            title: lot.parkingLotName,
-            description: String(lot.parkingLotId)
-          }
-        })
+        parkingLotsForAsso: parkingLotsForAsso
       }
     }
 
     case "ASSO_PAGE_MAP_LOT_KEY": {
+      const parkingBoysForAsso = state.parkingBoys.map((boy) => {
+        const parkingLotIds = boy.parkingLots.map(lot => {
+          return lot.parkingLotId
+        });
+
+        const parkingLotKeys =
+          state.parkingLotsForAsso
+            .filter(lot => {
+              if (parkingLotIds.includes(parseInt(lot.description))) {
+                return String(lot.key)
+              }
+            }).map(lot => {
+              return parseInt(lot.key)
+            });
+        return {
+          ...boy,
+          parkingLotKeys: parkingLotKeys
+
+        }
+      });
+      if (JSON.stringify(parkingBoysForAsso) === JSON.stringify(state.parkingBoysForAsso)) {
+        return state;
+      }
       return {
         ...state,
-        parkingBoysForAsso:
-          state.parkingBoys.map((boy) => {
-            const parkingLotIds = boy.parkingLots.map(lot => {
-              return lot.parkingLotId
-            });
-
-            const parkingLotKeys =
-              state.parkingLotsForAsso
-                .filter(lot => {
-                  if (parkingLotIds.includes(parseInt(lot.description))) {
-                    return String(lot.key)
-                  }
-                }).map(lot => {
-                  return parseInt(lot.key)
-                });
-            return {
-              ...boy,
-              parkingLotKeys: parkingLotKeys
-
-            }
-          })
+        parkingBoysForAsso: parkingBoysForAsso
+          
       }
     }
 

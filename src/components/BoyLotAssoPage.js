@@ -86,7 +86,7 @@ class BoyLotAssoPage extends Component {
       ),
     }];
 
-    
+
 
   handleChange = (nextTargetKeys, direction, moveKeys) => {
     this.setState({ targetKeys: nextTargetKeys });
@@ -94,12 +94,12 @@ class BoyLotAssoPage extends Component {
     // console.log('targetKeys: ', nextTargetKeys);
     // console.log('direction: ', direction);
     // console.log('moveKeys: ', moveKeys);
-    for (var index=0; index<moveKeys.length; index++){
+    for (var index = 0; index < moveKeys.length; index++) {
       console.log(this.props.parkingLotsForAsso[moveKeys[index]])
       this.props.assignLotToBoys(this.props.token, this.props.parkingLotsForAsso[moveKeys[index]].description, this.props.selectedEmployeeId)
     }
   }
-  
+
   handleSelectChange = (sourceSelectedKeys, targetSelectedKeys) => {
     this.setState({ selectedKeys: [...sourceSelectedKeys, ...targetSelectedKeys] });
 
@@ -130,7 +130,8 @@ class BoyLotAssoPage extends Component {
     //   .map(key => {
     //     return parseInt(key)
     //   }))
-    this.props.getInitData(this.props.token);
+    // this.props.getInitData(this.props.token);
+
     // console.log(this.props.parkingBoysForAsso);
     if (this.props.parkingBoysForAsso.length === 0 || this.props.parkingBoysForAsso == null) {
       // console.log("return");
@@ -142,7 +143,7 @@ class BoyLotAssoPage extends Component {
   }
 
   render() {
-    
+    console.log("render")
     const { targetKeys, selectedKeys, disabled } = this.state;
     return (
       <div>
@@ -154,7 +155,7 @@ class BoyLotAssoPage extends Component {
             columns={this.columns}
             expandedRowRender={employee => {
               this.selectEmployee(employee)
-              // console.log(employee)
+              this.props.getInitData(this.props.token);
               // console.log(this.props.getParkingLotsByEmployee(employee.employeeId))
               // console.log(this.props.parkingLotsForAsso)
               return <p style={{ margin: 0 }}>
@@ -191,14 +192,14 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   selectEmployee: (employee) => {
     dispatch({
-      type:"SELECT_EMPLOYEE",
+      type: "SELECT_EMPLOYEE",
       payload: employee.employeeId
     })
   },
 
   assignLotToBoys: (token, lotId, employeeId) => {
     console.log(employeeId)
-    fetch("https://parking-lot-backend.herokuapp.com/parkinglots/"+ lotId +"/employeeId/"+ employeeId, {
+    fetch("https://parking-lot-backend.herokuapp.com/parkinglots/" + lotId + "/employeeId/" + employeeId, {
       headers: new Headers({
         'Content-Type': 'application/json',
         'Authorization': token
@@ -206,8 +207,21 @@ const mapDispatchToProps = dispatch => ({
       mode: 'cors',
       method: 'PUT'
     })
-      .then(res => res.json())
-      .then(
+      // .then(res => res.json())
+      .then(res => {
+        if (res.status === 201) {
+          alert("boy-lot asso created");
+          return false;
+        }
+        alert(res.status + " error occurred when assigning parking lot");
+        return true;
+      })
+      .then(error => {
+        if (!error) {
+          return;
+        }
+
+
         fetch("https://parking-lot-backend.herokuapp.com/parkinglots", {
           headers: new Headers({
             'Content-Type': 'application/json',
@@ -229,10 +243,11 @@ const mapDispatchToProps = dispatch => ({
               payload: ''
             })
           )
-      );
+      });
   },
 
   getInitData: (token) => {
+    console.log("get init data")
     fetch("https://parking-lot-backend.herokuapp.com/parkingboys", {
       headers: new Headers({
         'Content-Type': 'application/json',
@@ -250,25 +265,25 @@ const mapDispatchToProps = dispatch => ({
       })
       .then(
         fetch("https://parking-lot-backend.herokuapp.com/parkinglots", {
-      //getInitData: fetch("http://localhost:8081/orders", {
-      headers: new Headers({
-        'Content-Type': 'application/json',
-        'Authorization': token
-      }),
-      mode: 'cors',
-      method: 'GET'
-    })
-      .then(res => res.json())
-      .then(res => {
-        dispatch({
-          type: "ASSO_PAGE_GET_ALL_PARKING_LOTS",
-          payload: res
-        });
-        dispatch({
-          type: "ASSO_PAGE_MAP_LOT_KEY",
-          payload: ''
-        });
-      }));
+          //getInitData: fetch("http://localhost:8081/orders", {
+          headers: new Headers({
+            'Content-Type': 'application/json',
+            'Authorization': token
+          }),
+          mode: 'cors',
+          method: 'GET'
+        })
+          .then(res => res.json())
+          .then(res => {
+            dispatch({
+              type: "ASSO_PAGE_GET_ALL_PARKING_LOTS",
+              payload: res
+            });
+            dispatch({
+              type: "ASSO_PAGE_MAP_LOT_KEY",
+              payload: ''
+            });
+          }));
   },
   getParkingLots: (token) => {
     fetch("https://parking-lot-backend.herokuapp.com/parkinglots", {
