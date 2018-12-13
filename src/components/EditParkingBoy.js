@@ -18,7 +18,7 @@ class EditParkingBoy extends Component {
 
   handleChange = (value) => {
     console.log(`selected ${value}`);
-    this.setState({value});
+    this.setState({ value });
   }
 
   handleSubmit = (e) => {
@@ -64,10 +64,16 @@ class EditParkingBoy extends Component {
               label="Phone">
               <span>{this.props.phone}</span>
             </FormItem>
-            <FormItem
+            {/* <FormItem
               label="Role">
-              <span>{this.props.role}</span>
-            </FormItem>
+              <Select defaultValue={this.props.role} style={{ width: 120 }} onChange={this.handleChange}>
+                <Option value="ROLE_EMPLOYEE">EMPLOYEE</Option>
+                <Option value="ROLE_PARKING_CLERK">PARKING CLERK</Option>
+                <Option value="ROLE_MANAGER">MANAGER</Option>
+                <Option value="ROLE_ADMIN" >ADMIN</Option>
+                <Option value="ROLE_HR">HR</Option>
+              </Select>
+            </FormItem> */}
             <FormItem
               label="Status">
               <Select defaultValue={this.props.status} style={{ width: 120 }} onChange={this.handleChange}>
