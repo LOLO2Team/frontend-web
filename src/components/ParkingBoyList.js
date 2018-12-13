@@ -5,19 +5,19 @@ import ParkingBoysResource from '../resources/parkingBoyResource';
 import EditParkingBoy from './EditParkingBoy'
 
 class ParkingBoyList extends Component {
-  constructor(props){
+  constructor(props) {
     super(props);
-    this.props.getInitData(this.props.token);    
+    this.props.getInitData(this.props.token);
   }
   state = {
     visible: false,
-    id:'',
+    id: '',
     name: '',
     username: '',
-    email:'',
-    phone:'',
-    role:'',
-    status:'',
+    email: '',
+    phone: '',
+    rolesList: [],
+    status: '',
   };
 
   showModal = () => {
@@ -51,8 +51,9 @@ class ParkingBoyList extends Component {
     this.props.deleteEmployee(id, this.props.token)
   }
 
-  onClickEdit = (id, name, username, email, phone, role, status) => {
-    this.setState({id, name, username, email, phone, role, status});
+  onClickEdit = (id, name, username, email, phone, rolesList, status) => {
+    // console.log(this.state.roleList)
+    this.setState({ id, name, username, email, phone, rolesList, status });
     this.showModal()
   }
 
@@ -76,11 +77,11 @@ class ParkingBoyList extends Component {
     },
     {
       title: 'Role',
-      key: 'role',
-      dataIndex: 'role',
+      key: 'rolesList',
+      dataIndex: 'rolesList',
       render: (text, record) => (
         <span>
-          {<Tag color="blue" key={this.props.parkingBoys.role}>{record.role}</Tag>}
+           {record.rolesList.map(role => <Tag color="blue" key={role}>{role}</Tag>)}
         </span>
       ),
     },
@@ -90,7 +91,7 @@ class ParkingBoyList extends Component {
       dataIndex: 'status',
       render: (text, record) => (
         <span>
-          {<Tag color="blue" key={this.props.parkingBoys.status}>{record.status}</Tag>}
+          {<Tag color="blue" key={record.status}>{record.status}</Tag>}
         </span>
       ),
     },
@@ -105,7 +106,7 @@ class ParkingBoyList extends Component {
             record.username,
             record.email,
             record.phone,
-            record.role,
+            record.rolesList,
             record.status)}>Edit {record.name}</a>
           <Divider type="vertical" />
           <a href="javascript:;" onClick={() => this.onClickDelete(record.employeeId)}>Freeze</a>
@@ -125,7 +126,7 @@ class ParkingBoyList extends Component {
           username={this.state.username}
           email={this.state.email}
           phone={this.state.phone}
-          role={this.state.role}
+          rolesList={this.state.rolesList}
           status={this.state.status}
         />
         <Table columns={this.columns} dataSource={this.props.parkingBoys} />
@@ -140,9 +141,10 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  getInitData: (token) => ParkingBoysResource.getAll(token)
+  getInitData: (token) => ParkingBoysResource.getAllEmployees(token)
     .then(res => res.json())
     .then(res => {
+      console.log(res[0])
       dispatch({
         type: "SET_PARKING_BOYS",
         payload: res
@@ -151,7 +153,7 @@ const mapDispatchToProps = dispatch => ({
   deleteEmployee: (id, token) => {
     ParkingBoysResource.deleteEmployee(id, token)
   },
-  editEmployee: (id,status, token) => {
+  editEmployee: (id, status, token) => {
     ParkingBoysResource.editEmployee(id, status, token)
   }
 });
