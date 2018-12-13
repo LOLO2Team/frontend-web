@@ -5,6 +5,10 @@ import ParkingBoysResource from '../resources/parkingBoyResource';
 import EditParkingBoy from './EditParkingBoy'
 
 class ParkingBoyList extends Component {
+  constructor(props){
+    super(props);
+    this.props.getInitData(this.props.token);    
+  }
   state = {
     visible: false,
     id:'',
@@ -109,7 +113,6 @@ class ParkingBoyList extends Component {
       ),
     }];
   render() {
-    const dummy = this.props.getInitData(this.props.token);
     return (
       <div>
         <EditParkingBoy

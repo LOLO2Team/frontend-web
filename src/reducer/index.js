@@ -28,7 +28,7 @@ export default (state = initialState, { type, payload }) => {
           capacity: lot.capacity,
           reservedSpace: lot.reservedSpace,
           employeeId: lot.employeeId,
-          status: lot.status
+            status: lot.parkingLotStatus
         }
       })
       if (JSON.stringify(parkingLots) === JSON.stringify(state.parkingLots)) {
