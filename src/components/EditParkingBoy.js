@@ -88,7 +88,7 @@ class EditParkingBoy extends Component {
       <div>
         <Modal
           visible={visible}
-          title="Edit Parking Boy"
+          title="Edit Employee"
           okText="Save"
           onCancel={onCancel}
           onOk={() => this.props.onCreate(this.state.value)}

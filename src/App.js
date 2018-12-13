@@ -32,8 +32,8 @@ class App extends Component {
             <Menu className="sider"theme="dark" mode="inline" defaultSelectedKeys={['1']}>
               <Menu.Item key="1">
                 <Icon type="user" />
-                <span>Parking Boys</span>
-                <Link to="/parkingBoys">Parking Boys</Link>
+                <span>Employee</span>
+                <Link to="/parkingBoys">Employee</Link>
               </Menu.Item>
               <Menu.Item key="2">
                 <i class="fab fa-product-hunt"></i>

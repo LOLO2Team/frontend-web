@@ -8,7 +8,7 @@ class ParkingBoyList extends Component {
   constructor(props) {
     super(props);
     this.props.getInitData(this.props.token);
-    console.log(this.props.rolesList)
+    console.log(this.props.parkingBoys)
   }
   state = {
     visible: false,
