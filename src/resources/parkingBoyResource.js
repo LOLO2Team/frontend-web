@@ -11,6 +11,25 @@ export default {
         })
 
     },
+    getAllParkingBoy: (token, dispatch) => {
+        return fetch("https://parking-lot-backend.herokuapp.com/parkingboys", {
+            //getInitData: fetch("http://localhost:8081/orders", {
+            headers: new Headers({
+                'Content-Type': 'application/json',
+                'Authorization': token
+            }),
+            mode: 'cors',
+            method: 'GET'
+        })
+            .then(res => res.json())
+            .then(res => {
+                dispatch({
+                    type: "SET_PARKING_BOYS",
+                    payload: res
+                });
+            })
+
+    },
     deleteEmployee: (id, token) => {
         return fetch("https://parking-lot-backend.herokuapp.com/parkingboys/" + id + "/status/FROZEN", {
             //getInitData: fetch("http://localhost:8081/orders", {
@@ -54,5 +73,5 @@ export default {
             method: 'POST'
         })
     }
-    
+
 }

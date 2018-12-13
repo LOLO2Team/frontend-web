@@ -3,7 +3,10 @@ import { connect } from "react-redux";
 import { Layout, Menu, Icon } from 'antd';
 import { Table, Divider, Tag } from 'antd';
 import { Transfer, Switch } from 'antd';
+import ParkingBoysResource from '../resources/parkingBoyResource';
+import parkingBoyResource from '../resources/parkingBoyResource';
 const { Header, Sider, Content } = Layout;
+
 
 let mockData = [];
 for (let i = 0; i < 20; i++) {
@@ -86,7 +89,7 @@ class BoyLotAssoPage extends Component {
       ),
     }];
 
-    
+
 
   handleChange = (nextTargetKeys, direction, moveKeys) => {
     this.setState({ targetKeys: nextTargetKeys });
@@ -97,6 +100,7 @@ class BoyLotAssoPage extends Component {
     for (var index = 0; index < moveKeys.length; index++) {
       this.props.assignLotToBoys(this.props.token, this.props.parkingLotsForAsso[moveKeys[index]].description, this.props.selectedEmployeeId)
     }
+    this.props.getInitData(this.props.token);
   }
 
   handleSelectChange = (sourceSelectedKeys, targetSelectedKeys) => {
@@ -154,7 +158,8 @@ class BoyLotAssoPage extends Component {
             columns={this.columns}
             expandedRowRender={employee => {
               this.selectEmployee(employee)
-              this.props.getInitData(this.props.token);
+              // this.props.getInitData(this.props.token);
+
               // console.log(this.props.getParkingLotsByEmployee(employee.employeeId))
               // console.log(this.props.parkingLotsForAsso)
               return <p style={{ margin: 0 }}>
@@ -205,21 +210,15 @@ const mapDispatchToProps = dispatch => ({
       mode: 'cors',
       method: 'PUT'
     })
-      // .then(res => res.json())
-      .then(res => {
-        if (res.status === 201) {
-          alert("boy-lot asso created");
-          return false;
-        }
+    // .then(res => res.json())
+    .then(res => {
+      if (res.status === 201) {
+        // alert("boy-lot asso created");
+      } else {
         alert(res.status + " error occurred when assigning parking lot");
-        return true;
-      })
-      .then(error => {
-        if (!error) {
-          return;
-        }
-
-
+      }
+    });
+    parkingBoyResource.getAllParkingBoy(token, dispatch)
         fetch("https://parking-lot-backend.herokuapp.com/parkinglots", {
           headers: new Headers({
             'Content-Type': 'application/json',
@@ -228,32 +227,23 @@ const mapDispatchToProps = dispatch => ({
           mode: 'cors',
           method: 'GET'
         })
-          .then(res => res.json())
-          .then(res => {
-            dispatch({
-              type: "ASSO_PAGE_GET_ALL_PARKING_LOTS",
-              payload: res
-            })
-          })
-          .then(
-            dispatch({
-              type: "ASSO_PAGE_MAP_LOT_KEY",
-              payload: ''
-            })
-          )
-      });
+      .then(res => res.json())
+      .then(res =>
+        dispatch({
+          type: "ASSO_PAGE_GET_ALL_PARKING_LOTS",
+          payload: res
+        }))
+      .then(
+        dispatch({
+          type: "ASSO_PAGE_MAP_LOT_KEY",
+          payload: ''
+        }))
+      .then(console.log("refreshed"))
   },
 
   getInitData: (token) => {
-    console.log("get init data")
-    fetch("https://parking-lot-backend.herokuapp.com/parkingboys", {
-      headers: new Headers({
-        'Content-Type': 'application/json',
-        'Authorization': token
-      }),
-      mode: 'cors',
-      method: 'GET'
-    })
+    // console.log("get init data")
+    ParkingBoysResource.getAll(token)
       .then(res => res.json())
       .then(res => {
         dispatch({
@@ -306,7 +296,7 @@ const mapDispatchToProps = dispatch => ({
       });
   },
   // getParkingLotsByEmployee: (employeeId) => {
-  //   fetch("https://parking-lot-backend.herokuapp.com/parkinglots?employeeId=" + employeeId, {
+  //   fetch("d?employeeId=" + employeeId, {
   //     //getInitData: fetch("http://localhost:8081/orders", {
   //     headers: new Headers({
   //       'Content-Type': 'application/json'
