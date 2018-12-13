@@ -135,7 +135,7 @@ const mapDispatchToProps = dispatch => ({
       )
   },
   getAllData: (token) => {
-    ParkingBoysResource.getAll(token)
+    ParkingBoysResource.getAllEmployees(token)
       .then(res => res.json())
       .then(res => {
         dispatch({

@@ -87,7 +87,7 @@ class ParkingBoyList extends Component {
       render: (text, record) => (
         <span>
           {/* {console.log(record.rolesList)} */}
-           {/* {record.rolesList.map(role => <Tag color="blue" key={role}>{role}</Tag>)} */}
+           {record.rolesList.map(role => <Tag color="blue" key={role}>{role}</Tag>)}
         </span>
       ),
     },
