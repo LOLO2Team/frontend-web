@@ -122,6 +122,10 @@ const mapDispatchToProps = dispatch => ({
             type: "SET_ROLE",
             payload: rolesList
           });
+          dispatch({
+            type: "SET_MY_ROLE",
+            payload: rolesList
+          })
         } else {
           alert("You are not authorized.");
         }

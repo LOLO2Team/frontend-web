@@ -118,6 +118,16 @@ class ParkingBoyList extends Component {
         </span>
       ),
     }];
+
+  componentWillMount() {
+    this.props.getInitData(this.props.token);
+  }
+  componentDidMount() {
+    this.interval = setInterval(() => this.props.getInitData(this.props.token), 1000);
+  }
+  componentWillUnmount() {
+    clearInterval(this.interval);
+  }
   render() {
     return (
       <div>

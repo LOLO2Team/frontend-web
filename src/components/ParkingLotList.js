@@ -5,20 +5,29 @@ import parkingLotResource from '../resources/parkingLotResource';
 
 
 class ParkingLotList extends Component {
-    state = {
-        dummy: " "
-    }
+  state = {
+    dummy: " "
+  }
   toggleLot = (id, status) => {
-      
+
     console.log(id + " " + status)
-    if (status === "OPEN"){
-        status = "CLOSED"
+    if (status === "OPEN") {
+      status = "CLOSED"
     }
-    else{
-        status = "OPEN"
+    else {
+      status = "OPEN"
     }
     console.log(id + " " + status)
     this.props.toggleLot(id, this.props.token, status)
+  }
+
+  renderToggleButton = (record) => {
+    if (this.props.myRole.includes("ROLE_MANAGER")) {
+      return <button
+      // checked={true}
+      onClick={() => this.toggleLot(record.parkingLotId, record.status)}
+    >Toggle</button>;
+    }
   }
 
   columns = [{
@@ -55,64 +64,73 @@ class ParkingLotList extends Component {
   {
     title: 'Action',
     key: 'action',
-    render: (text, record) => (
-        <button
-          // checked={true}
-          onClick={() =>this.toggleLot(record.parkingLotId, record.status)}
-        >Toggle</button>
-    )
+    render: (text, record) => (this.renderToggleButton(record))
   }];
 
-
+  componentWillMount() {
+    this.props.getInitData(this.props.token);
+  }
+  // componentDidMount() {
+  //   this.interval = setInterval(() => this.props.getInitData(this.props.token), 1000);
+  // }
+  // componentWillUnmount() {
+  //   clearInterval(this.interval);
+  // }
   render() {
-    const dummy = this.props.getInitData;
+    // const dummy = this.props.getInitData;
     return (
-        <div>
-            <Table columns={this.columns} dataSource={this.props.parkingLots} />
-            {this.state.dummy}
-        </div>
+      <div>
+        <Table columns={this.columns} dataSource={this.props.parkingLots} />
+        {this.state.dummy}
+      </div>
     )
   }
 }
 
 const mapStateToProps = state => ({
   parkingLots: state.parkingLots,
-  token: state.token
+  token: state.token,
+  myRole: state.myRole
 });
 
 const mapDispatchToProps = dispatch => ({
-  getInitData: fetch("https://parking-lot-backend.herokuapp.com/parkinglots", {
-    //getInitData: fetch("http://localhost:8081/orders", {
-    headers: new Headers({
-      'Content-Type': 'application/json'
-    }),
-    mode: 'cors',
-    method: 'GET'
-  })
-    .then(res => res.json())
-    .then(res => {
-      dispatch({
-        type: "SET_PARKING_LOTS",
-        payload: res
-      });
-    }),
+  getInitData: () => {
+    console.log("get init");
+    fetch("https://parking-lot-backend.herokuapp.com/parkinglots", {
+      //getInitData: fetch("http://localhost:8081/orders", {
+      headers: new Headers({
+        'Content-Type': 'application/json'
+      }),
+      mode: 'cors',
+      method: 'GET'
+    })
+      .then(res => res.json())
+      .then(res => {
+        dispatch({
+          type: "SET_PARKING_LOTS",
+          payload: res
+        });
+      })
+  },
 
   toggleLot: (id, token, status) => {
     parkingLotResource.toggleLot(id, token, status)
-    fetch("https://parking-lot-backend.herokuapp.com/parkinglots", {
-        //getInitData: fetch("http://localhost:8081/orders", {
-        headers: new Headers({
-        'Content-Type': 'application/json'
-        }),
-        mode: 'cors',
-        method: 'GET'
-    }).then(res => res.json())
-    .then(res => {
-      dispatch({
-        type: "SET_PARKING_LOTS",
-        payload: res
-      });
-    })
+      .then(() => 
+        fetch("https://parking-lot-backend.herokuapp.com/parkinglots", {
+          //getInitData: fetch("http://localhost:8081/orders", {
+          headers: new Headers({
+            'Content-Type': 'application/json'
+          }),
+          mode: 'cors',
+          method: 'GET'
+        }))
+      .then(res => res.json())
+      .then(res => {
+        dispatch({
+          type: "SET_PARKING_LOTS",
+          payload: res
+        });
+      })
   }
 });
 

@@ -7,7 +7,8 @@ const initialState = {
   authorized: false,
   selectedEmployeeId: 0,
   parkingBoysForAsso: [],
-  parkingLotsForAsso: []
+  parkingLotsForAsso: [],
+  myRole: []
 }
 
 export default (state = initialState, { type, payload }) => {
