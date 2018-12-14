@@ -121,6 +121,13 @@ const mapDispatchToProps = dispatch => ({
       'Content-Type': 'application/json',
       'Authorization': token
     })
+  })
+  .then(res => {
+    if (res.status === 201) {
+      alert("Employee created.");
+    } else {
+      alert(res.status + " error has occurred.");
+    }
   }),
   refreshData: (token) => fetch("https://parking-lot-backend.herokuapp.com/parkingboys", {
     //getInitData: fetch("http://localhost:8081/orders", {

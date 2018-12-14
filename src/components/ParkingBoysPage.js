@@ -76,10 +76,19 @@ class ParkingBoysPage extends Component {
     // console.log(this.props.rolesList)
     console.log("role" + this.props.role)
     if (this.props.role == "ROLE_HR") {
-      return <Button className="margin-bottom-15" type="primary" onClick={this.showModal}>Create Parking Boy</Button>
+      return <Button className="margin-bottom-15" type="primary" onClick={this.showModal}>Create New User</Button>
     }
   }
 
+  componentWillMount() {
+    this.props.getAllData(this.props.token);
+  }
+  componentDidMount() {
+    this.interval = setInterval(() => this.props.getAllData(this.props.token), 1000);
+  }
+  componentWillUnmount() {
+    clearInterval(this.interval);
+  }
   render() {
     return (
       <div>
@@ -112,6 +121,15 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   createBoy: (values, token) => {
     ParkingBoysResource.createBoy(values, token)
+    .then(res => {
+      if (res.status === 201) {
+        alert("Employee created");
+      } else if (res.status === 403)
+        alert("You are not authorized to do the action");      
+      else {
+        alert(res.status + " error has occurred");
+      }
+    })
   },
 
   searchBoy: (value, token) => {
@@ -134,7 +152,7 @@ const mapDispatchToProps = dispatch => ({
       }
       )
   },
-  getAllData: (token) => {
+  getAllData: (token) => 
     ParkingBoysResource.getAllEmployees(token)
       .then(res => res.json())
       .then(res => {
@@ -143,7 +161,7 @@ const mapDispatchToProps = dispatch => ({
           payload: res
         });
       })
-  },
+  ,
   getAllEmployees: (token) =>{
     return fetch("https://parking-lot-backend.herokuapp.com/employees", {
         //getInitData: fetch("http://localhost:8081/orders", {
