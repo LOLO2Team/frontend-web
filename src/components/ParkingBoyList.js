@@ -61,6 +61,11 @@ class ParkingBoyList extends Component {
     this.setState({ id, name, username, email, phone, rolesList, status });
     this.showModal()
   }
+
+  mapRoleList = (record) => {
+    if(record.rolesList!=null){
+      return record.rolesList.map(role => <Tag color="blue" key={role}>{role}</Tag>)}
+  }
   
   columns = [
     {
@@ -85,9 +90,8 @@ class ParkingBoyList extends Component {
       key: 'rolesList',
       dataIndex: 'rolesList',
       render: (text, record) => (
-        <span>
-          {/* {console.log(record.rolesList)} */}
-           {record.rolesList.map(role => <Tag color="blue" key={role}>{role}</Tag>)}
+        <span>          
+          {this.mapRoleList(record)} 
         </span>
       ),
     },
