@@ -120,9 +120,9 @@ class ParkingBoyList extends Component {
       ),
     }];
 
-  // componentWillMount() {
-  //   this.props.getInitData(this.props.token);
-  // }
+  componentWillMount() {
+    this.props.getInitData(this.props.token);
+  }
   // componentDidMount() {
   //   this.interval = setInterval(() => this.props.getInitData(this.props.token), 1000);
   // }

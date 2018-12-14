@@ -23,9 +23,9 @@ class OrderList extends Component {
       key: 'parkingLotName',
       dataIndex: 'parkingLotName',
     }, {
-      title: 'Employee Id',
-      key: 'employeeId',
-      dataIndex: 'employeeId',
+      title: 'Employee',
+      key: 'employeeName',
+      dataIndex: 'employeeName',
     },
     {
       title: 'Status',
@@ -59,7 +59,7 @@ class OrderList extends Component {
   }
 
   assignOrderToEmployee = (order, refNum) => {
-    this.props.assignOrder(this.props.token, order, document.getElementById(refNum).value);
+    this.props.assignOrder(this.props.token, order, document.getElementById(refNum).value, this.props.parkingBoys);
     document.getElementById(refNum).value = '';
   }
 
@@ -73,9 +73,22 @@ class OrderList extends Component {
     clearInterval(this.interval);
   }
   render() {
+    const orders = this.props.orders.map(order => {
+      if (this.props.parkingBoys == null) {
+        return order;
+      }
+      const parkingBoy = this.props.parkingBoys.find(boy => boy.employeeId === order.employeeId);
+      if (parkingBoy == null) {
+        return order;
+      }
+      return {
+        ...order,
+        employeeName: parkingBoy.name
+      }
+    })
     return (
       <div>
-        <Table columns={this.columns} dataSource={this.props.orders} />
+        <Table columns={this.columns} dataSource={orders} />
       </div>
     )
   }
@@ -85,20 +98,35 @@ class OrderList extends Component {
 const mapStateToProps = state => ({
   orders: state.orders,
   token: state.token,
-  myRole: state.myRole
+  myRole: state.myRole,
+  parkingBoys: state.parkingBoys
 });
 
 const mapDispatchToProps = dispatch => ({
   getInitData: (token) =>
+  fetch("https://parking-lot-backend.herokuapp.com/parkingboys", {
+    headers: new Headers({
+      'Content-Type': 'application/json',
+      'Authorization': token
+    }),
+    mode: 'cors',
+    method: 'GET'
+  })
+    .then(res => res.json())
+    .then(res =>
+      dispatch({
+        type: "SET_PARKING_BOYS",
+        payload: res
+      }))
+      .then(() => 
     fetch("https://parking-lot-backend.herokuapp.com/parkinglots", {
-      //getInitData: fetch("http://localhost:8081/orders", {
       headers: new Headers({
         'Content-Type': 'application/json',
         'Authorization': token
       }),
       mode: 'cors',
       method: 'GET'
-    })
+    }))
       .then(res => res.json())
       .then(res =>
         dispatch({
@@ -107,7 +135,6 @@ const mapDispatchToProps = dispatch => ({
         }))
       .then(() =>
         fetch("https://parking-lot-backend.herokuapp.com/orders", {
-          //getInitData: fetch("http://localhost:8081/orders", {
           headers: new Headers({
             'Content-Type': 'application/json',
             'Authorization': token
@@ -123,7 +150,21 @@ const mapDispatchToProps = dispatch => ({
         });
       }),
 
-  assignOrder: (token, order, employeeId) =>
+  assignOrder: (token, order, employeeName, parkingBoys) => {
+    if (parkingBoys == null) {
+      alert("Parking boys not found");
+      return;
+    }
+    if (parkingBoys.length === 0) {
+      alert("Parking boys not found");
+      return;
+    }
+    const boy = parkingBoys.find(boy => boy.name === employeeName)
+    if (boy == null) {
+      alert("Parking boy " + employeeName + " not found");
+      return;
+    }
+    const employeeId = boy.employeeId;
     fetch("https://parking-lot-backend.herokuapp.com/orders/" + order.orderId + "/employeeId/" + employeeId, {
       //fetch("http://localhost:8081/orders/" + order.orderId + "/employeeId/0",{
       mode: 'cors',
@@ -139,13 +180,15 @@ const mapDispatchToProps = dispatch => ({
         'Authorization': token
       })
     })
-    .then(res => {
-      if (res.status === 200) {
-        alert("Order assigned to employee");
-      } else {
-        alert(res.status + " error occurred");
-      }
-    })
+      .then(res => {
+        console.log(res)
+        if (res.status === 200) {
+          alert("Order assigned to employee");
+        } else {
+          alert(res.status + " error occurred");
+        }
+      })
+    }
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(OrderList);
