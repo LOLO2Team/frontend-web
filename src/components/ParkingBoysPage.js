@@ -13,7 +13,8 @@ class ParkingBoysPage extends Component {
   state = {
     visible: false,
     canSearch: true,
-    searchValue: ''
+    searchValue: '',
+    searching: false
   };
 
   showModal = () => {
@@ -47,15 +48,21 @@ class ParkingBoysPage extends Component {
 
   searchEmployee = (e) => {
     console.log(e.target.value);
-    this.setState({ canSearch: false });
-    this.setState({ searchValue: e.target.value });
+    this.setState({ 
+      canSearch: false,
+      searchValue: e.target.value,
+      searching: true
+    });
     this.props.searchBoy(this.state.searchValue, this.props.token)
   }
 
-  getAllData = (e) => {
-    this.setState({ searchValue: '' });
+  getAllData = () => {
+    this.setState({ 
+      searchValue: '',
+      searching: false,
+      canSearch: true
+    });
     this.props.getAllData(this.props.token);
-    this.setState({ canSearch: true });
   }
 
   showSearch = () => {
@@ -80,15 +87,22 @@ class ParkingBoysPage extends Component {
     }
   }
 
-  componentWillMount() {
-    this.props.getAllData(this.props.token);
+  mountGetData = () => {
+    if (this.state.searching) {
+      return this.props.searchBoy(this.state.searchValue, this.props.token);
+    }
+    return this.props.getAllData(this.props.token);
   }
-  componentDidMount() {
-    this.interval = setInterval(() => this.props.getAllData(this.props.token), 1000);
-  }
-  componentWillUnmount() {
-    clearInterval(this.interval);
-  }
+
+  // componentWillMount() {
+  //   this.props.getAllData(this.props.token);
+  // }
+  // componentDidMount() {
+  //   this.interval = setInterval(this.mountGetData(), 1000);
+  // }
+  // componentWillUnmount() {
+  //   clearInterval(this.interval);
+  // }
   render() {
     return (
       <div>
