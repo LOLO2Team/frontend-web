@@ -63,7 +63,6 @@ export default {
             mode: 'cors',
             method: 'PUT'
         })
-            .then(res => console.log(res))
     },
     editEmployeeRole:(id, role, token) => {
         console.log("api")

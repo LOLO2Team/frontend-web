@@ -87,22 +87,19 @@ class ParkingBoysPage extends Component {
     }
   }
 
-  mountGetData = () => {
-    if (this.state.searching) {
-      return this.props.searchBoy(this.state.searchValue, this.props.token);
-    }
-    return this.props.getAllData(this.props.token);
+  componentWillMount() {
+    this.props.getAllData(this.props.token);
   }
-
-  // componentWillMount() {
-  //   this.props.getAllData(this.props.token);
-  // }
-  // componentDidMount() {
-  //   this.interval = setInterval(this.mountGetData(), 1000);
-  // }
-  // componentWillUnmount() {
-  //   clearInterval(this.interval);
-  // }
+  componentDidMount() {
+    if (this.state.searching) {
+      this.interval = setInterval(this.props.searchBoy(this.state.searchValue, this.props.token), 1000);
+    } else {
+      this.interval = setInterval(this.props.getAllData(this.props.token), 1000);
+    }
+  }
+  componentWillUnmount() {
+    clearInterval(this.interval);
+  }
   render() {
     return (
       <div>
